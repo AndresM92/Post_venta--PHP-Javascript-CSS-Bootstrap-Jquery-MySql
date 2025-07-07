@@ -1,6 +1,7 @@
 
+let t_Usuarios;
 $(document).ready(function () {
-    let t_Usuarios;
+    //let t_Usuarios;
     t_Usuarios = $('#ta_Usuarios').DataTable({
         ajax: {
             url: base_url + "Usuarios/listar",
@@ -55,6 +56,7 @@ function frmUsers() {
     document.getElementById("btnAction").innerHTML = "Registrar";
     document.getElementById("passwords").classList.remove("d-none");
     document.getElementById("frmUsuario").reset();
+    document.getElementById("id").value="";
     $("#new_user").modal("show");
 }
 
@@ -113,19 +115,19 @@ function register_user(e) {
     const caja = document.getElementById("caja");
 
     // Validaciones
-    if (usuario.value == ""  || nombre.value == "" || caja.value == "") {
+    if (usuario.value == "" || nombre.value == "" || caja.value == "") {
         Swal.fire({
             icon: "error",
             title: "Todos los campos son obligatorios",
             timer: 3000
         });
-    } /*else if (pass.value != confirmar.value) {
+    } else if (pass.value != confirmar.value) {
         Swal.fire({
             icon: "error",
             title: "Las contraseñas no coinciden",
             timer: 3000
         });
-    } */else {
+    } else {
         const url = base_url + "Usuarios/registrar"; // Asegúrate de que base_url esté definido
         const frm = document.getElementById("frmUsuario");
         const http = new XMLHttpRequest();
@@ -137,6 +139,7 @@ function register_user(e) {
                 const contentType = this.getResponseHeader('Content-Type');
                 if (contentType && contentType.includes('application/json')) {
                     try {
+
                         const response = JSON.parse(this.responseText);
                         if (response.msg == "Cliente registrado con éxito") {
                             Swal.fire({
@@ -147,6 +150,8 @@ function register_user(e) {
                             });
                             frm.reset();
                             $("#new_user").modal("hide");
+                            t_Usuarios.ajax.reload();
+
                         } else if (response.msg == "Usuario modificado con éxito") {
                             Swal.fire({
                                 title: "Usuario modificado con éxito",
@@ -154,9 +159,10 @@ function register_user(e) {
                                 draggable: true,
                                 timer: 3000
                             });
-                            frm.reset();
+                            //frm.reset();
                             $("#new_user").modal("hide");
-                            
+                            t_Usuarios.ajax.reload(null, true);
+
 
                         }/* else if (response.msg == "Todos los campos son obligatorios") {
                             Swal.fire({
@@ -207,10 +213,10 @@ function btn_edit_User(id) {
         if (this.readyState == 4 && this.status == 200) {
             const res = JSON.parse(this.responseText);
 
-            document.getElementById("id").value=res.id;
-            document.getElementById("usuario").value=res.usuario;
-            document.getElementById("nombre").value=res.nombre;
-            document.getElementById("caja").value=res.id_caja;
+            document.getElementById("id").value = res.id;
+            document.getElementById("usuario").value = res.usuario;
+            document.getElementById("nombre").value = res.nombre;
+            document.getElementById("caja").value = res.id_caja;
             document.getElementById("passwords").classList.add("d-none");
             $("#new_user").modal("show");
         }

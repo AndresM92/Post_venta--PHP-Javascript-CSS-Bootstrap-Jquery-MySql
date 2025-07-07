@@ -70,6 +70,7 @@ class Usuarios extends Controller
         $confirmar = $_POST["confirmar"];
         $caja = $_POST["caja"];
         $id = $_POST["id"];
+        $hash= hash("SHA256",$pass);
 
         if (empty($usuario) || empty($nombre) || empty($caja)) {
             $msg = array('msg' => 'Todos los campos son obligatorios', 'icono' => 'info');
@@ -80,7 +81,7 @@ class Usuarios extends Controller
                     $msg = array('msg' => 'Las contraseñas no son iguales', 'icono' => 'error');
                     //$msg = "Las contraseñas no coinciden";
                 } else {
-                    $data = $this->model->registrar_usuario($usuario, $nombre, $pass, $caja);
+                    $data = $this->model->registrar_usuario($usuario, $nombre, $hash, $caja);
                     if ($data == "ok") {
                         $msg = array('msg' => 'Cliente registrado con éxito', 'icono' => 'success');
                     } else if ($data == "existe") {
@@ -90,9 +91,9 @@ class Usuarios extends Controller
                     }
                 }
             } else {
-                $data2 = $this->model->modi_user($usuario, $nombre, $caja, $id);
-                print_r($data2);
-                if ($data2 == "upda") {
+                $data = $this->model->modi_user($usuario, $nombre, $caja, $id);
+                //print_r($data);
+                if ($data == "upda") {
                     $msg = array('msg' => 'Usuario modificado con éxito', 'icono' => 'success');
                 } else {
                     $msg = array('msg' => 'Error al modificar el usuario', 'icono' => 'error');
