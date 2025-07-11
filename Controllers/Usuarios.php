@@ -22,19 +22,26 @@ class Usuarios extends Controller
     public function listar()
     {
 
-
+        $btn_disabled = 'disabled';
         //print_r($this->model->getUsuarios());
         $data = $this->model->getUsuarios();
         for ($i = 0; $i < count($data); $i++) {
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
+                $btn_disabled = 'disabled';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
+                $btn_disabled = '';
             }
+
             $data[$i]['acciones'] =
                 '<div>
-                <button class="btn btn-primary" type="button" onclick="btn_edit_User(' . $data[$i]['id'] . ');">Editar</button>
-                <button class="btn btn-danger" type="button" onclick="btn_delete_User();">Eliminar</button>
+                <button class="btn btn-primary" type="button" onclick="btn_edit_User(' . $data[$i]['id'] . ');"><i class= "fas fa-edit"></i></button>
+                <button class="btn btn-danger" type="button" onclick="btn_delete_User(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
+
+                
+                <button   id="reingresar_' . $data[$i]['id'] . '" class="btn btn-success"  type="button" '.$btn_disabled.' onclick="btn_reingre_User(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
+
              </div>';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -47,15 +54,16 @@ class Usuarios extends Controller
             $msg = array('msg' => 'Todo los campos son requeridos', 'icono' => 'error');
         } else {
             $usuario = $_POST["usuario"];
-            $clave = $_POST["clave"];
-            $data = $this->model->getUsuario($usuario, $clave);
+            $pass = $_POST["clave"];
+            $hash=hash("SHA256",$pass);
+            $data = $this->model->getUsuario($usuario, $hash);
             if ($data) {
                 $_SESSION["id_usuario"] = $data["id"];
                 $_SESSION["usuario"] = $data["usuario"];
                 $_SESSION["nombre"] = $data["nombre"];
                 $msg = array('msg' => 'Iniciando sesion', 'icono' => 'success');
             } else {
-                $msg = array('msg' => 'Iniciando sesion', 'icono' => 'error');
+                $msg = array('msg' => 'No se pudo iniciar sesion', 'icono' => 'error');
             }
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
@@ -70,7 +78,7 @@ class Usuarios extends Controller
         $confirmar = $_POST["confirmar"];
         $caja = $_POST["caja"];
         $id = $_POST["id"];
-        $hash= hash("SHA256",$pass);
+        $hash = hash("SHA256", $pass);
 
         if (empty($usuario) || empty($nombre) || empty($caja)) {
             $msg = array('msg' => 'Todos los campos son obligatorios', 'icono' => 'info');
@@ -109,6 +117,34 @@ class Usuarios extends Controller
     {
         $data = $this->model->edit_user($id);
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function eliminar(int $id)
+    {
+
+        $data = $this->model->delete_user($id);
+        if ($data == 1) {
+            $msg = array('msg' => 'Usuario eliminado con exito', 'icono' => 'success');
+        } else {
+            $msg = array('msg' => 'Error al eliminar el usuario', 'icono' => 'error');
+        }
+
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function reingresar(int $id)
+    {
+
+        $data = $this->model->reingresar_user($id,1);
+        if ($data == 1) {
+            $msg = array('msg' => 'Usuario reingresado con exito', 'icono' => 'success');
+        } else {
+            $msg = array('msg' => 'Error al reingresar el usuario', 'icono' => 'error');
+        }
+
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
     }
 }

@@ -1,5 +1,40 @@
 
 let t_Usuarios;
+
+function frmLogin(e) {
+    /*window.location="http://localhost/pos_venta/Usuarios";*/
+    e.preventDefault();
+    const usuario = document.getElementById("usuario");
+    const clave = document.getElementById("clave");
+
+    if (usuario.value == "" || clave.value == "") {
+        //alertify.error("Todo los campos son requeridos");
+        Swal.fire({
+            icon: "error",
+            title: "Todo los campos son requeridos",
+            timer: 3000
+        });
+    } else {
+        const url = base_url + "Usuarios/validar";
+        const frm = document.getElementById("frmLoginn");
+        const http = new XMLHttpRequest();
+        http.open("POST", url, true);
+        http.send(new FormData(frm));
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const res = JSON.parse(this.responseText);
+                if (res.msg == "Iniciando sesion") {
+                    
+                    window.location.href = base_url + "Usuarios";
+                } else {
+                    document.getElementById("alerta").classList.remove("d-none");
+                    document.getElementById("alerta").innerHTML = res;
+                }
+            }
+        }
+    }
+}
+
 $(document).ready(function () {
     //let t_Usuarios;
     t_Usuarios = $('#ta_Usuarios').DataTable({
@@ -23,40 +58,13 @@ $(document).ready(function () {
     });
 });
 
-function frmLogin(e) {
-    /*window.location="http://localhost/pos_venta/Usuarios";*/
-    e.preventDefault();
-    const usuario = document.getElementById("usuario");
-    const clave = document.getElementById("clave");
-
-    if (usuario.value == "" || clave.value == "") {
-        alertify.error("Todo los campos son requeridos");
-    } else {
-        const url = base_url + "Usuarios/validar";
-        const frm = document.getElementById("frmLogin");
-        const http = new XMLHttpRequest();
-        http.open("POST", url, true);
-        http.send(new FormData(frm));
-        http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                const res = JSON.parse(this.responseText);
-                if (res == "success") {
-                    window.location = base_url + "Usuarios";
-                } else {
-                    document.getElementById("alerta").classList.remove("d-none");
-                    document.getElementById("alerta").innerHTML = res;
-                }
-            }
-        }
-    }
-}
 
 function frmUsers() {
     document.getElementById("title").innerHTML = "Nuevo Usuario";
     document.getElementById("btnAction").innerHTML = "Registrar";
     document.getElementById("passwords").classList.remove("d-none");
     document.getElementById("frmUsuario").reset();
-    document.getElementById("id").value="";
+    document.getElementById("id").value = "";
     $("#new_user").modal("show");
 }
 
@@ -222,3 +230,87 @@ function btn_edit_User(id) {
         }
     };
 }
+
+function btn_delete_User(id) {
+
+    Swal.fire({
+        title: "Estas seguro de eliminar?",
+        text: "El usuario no se eliminara de forma permanente, solo pasara a estado inactivo",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Usuarios/eliminar/" + id; // Asegúrate de que base_url esté definido
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    if (response.msg == "Usuario eliminado con exito") {
+                        Swal.fire(
+                            response.msg,
+                            '',
+                            "success"
+                        )
+                        t_Usuarios.ajax.reload();
+
+                    } else {
+                        Swal.fire(
+                            response.msg,
+                            response,
+                            "error"
+                        )
+                    }
+                }
+            }
+        }
+    })
+}
+
+function btn_reingre_User(id) {
+
+    Swal.fire({
+        title: "Estas seguro de reingresar el usuario?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Usuarios/reingresar/" + id; // Asegúrate de que base_url esté definido
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    if (response.msg == "Usuario reingresado con exito") {
+                        Swal.fire(
+                            response.msg,
+                            '',
+                            "success"
+                        )
+                        t_Usuarios.ajax.reload();
+
+                    } else {
+                        Swal.fire(
+                            response.msg,
+                            response,
+                            "error"
+                        )
+                    }
+                }
+            }
+        }
+    })
+}
+

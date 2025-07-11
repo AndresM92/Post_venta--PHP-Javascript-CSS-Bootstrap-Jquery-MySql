@@ -15,7 +15,7 @@
                    </div>
                    </div>
 
-                   <script src="<?php echo base_url; ?>Assets/js/jquery-3.6.0.min.js"></script>
+                   <script src="<?php echo base_url; ?>Assets/js/jquery-3.7.1.min.js"></script>
                    <script src="<?php echo base_url; ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
                    <script src="<?php echo base_url; ?>Assets/js/scripts.js"></script>
                    <script src="<?php echo base_url; ?>Assets/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
