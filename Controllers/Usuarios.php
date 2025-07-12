@@ -6,8 +6,12 @@ class Usuarios extends Controller
     public function __construct()
     {
         #$model = new UsuariosModel();
-        parent::__construct();
         session_start();
+
+        if(empty($_SESSION["session_active"])){
+            header("location: ".base_url);
+        }
+        parent::__construct();
     }
 
     public function index()
@@ -61,6 +65,7 @@ class Usuarios extends Controller
                 $_SESSION["id_usuario"] = $data["id"];
                 $_SESSION["usuario"] = $data["usuario"];
                 $_SESSION["nombre"] = $data["nombre"];
+                $_SESSION["session_active"]=true;
                 $msg = array('msg' => 'Iniciando sesion', 'icono' => 'success');
             } else {
                 $msg = array('msg' => 'No se pudo iniciar sesion', 'icono' => 'error');
@@ -146,5 +151,10 @@ class Usuarios extends Controller
 
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
+    }
+
+    public function salir (){
+        session_destroy();
+        header("location:".base_url);
     }
 }
