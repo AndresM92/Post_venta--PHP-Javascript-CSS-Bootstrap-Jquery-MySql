@@ -5,22 +5,17 @@ class Usuarios extends Controller
 
     public function __construct()
     {
-        #$model = new UsuariosModel();
         session_start();
-
-        if(empty($_SESSION["session_active"])){
-            header("location: ".base_url);
-        }
         parent::__construct();
     }
 
     public function index()
     {
+        if (empty($_SESSION["session_active"])) {
+            header("location: " . base_url);
+        }
         $data['cajas'] = $this->model->getCajas();
         $this->views->getView($this, "index", $data);
-        #$model = new UsuariosModel();
-        #print_r($model->getUsuario());
-
     }
 
     public function listar()
@@ -44,7 +39,7 @@ class Usuarios extends Controller
                 <button class="btn btn-danger" type="button" onclick="btn_delete_User(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
 
                 
-                <button   id="reingresar_' . $data[$i]['id'] . '" class="btn btn-success"  type="button" '.$btn_disabled.' onclick="btn_reingre_User(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
+                <button   id="reingresar_' . $data[$i]['id'] . '" class="btn btn-success"  type="button" ' . $btn_disabled . ' onclick="btn_reingre_User(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
 
              </div>';
         }
@@ -59,13 +54,13 @@ class Usuarios extends Controller
         } else {
             $usuario = $_POST["usuario"];
             $pass = $_POST["clave"];
-            $hash=hash("SHA256",$pass);
+            $hash = hash("SHA256", $pass);
             $data = $this->model->getUsuario($usuario, $hash);
             if ($data) {
                 $_SESSION["id_usuario"] = $data["id"];
                 $_SESSION["usuario"] = $data["usuario"];
                 $_SESSION["nombre"] = $data["nombre"];
-                $_SESSION["session_active"]=true;
+                $_SESSION["session_active"] = true;
                 $msg = array('msg' => 'Iniciando sesion', 'icono' => 'success');
             } else {
                 $msg = array('msg' => 'No se pudo iniciar sesion', 'icono' => 'error');
@@ -142,7 +137,7 @@ class Usuarios extends Controller
     public function reingresar(int $id)
     {
 
-        $data = $this->model->reingresar_user($id,1);
+        $data = $this->model->reingresar_user($id, 1);
         if ($data == 1) {
             $msg = array('msg' => 'Usuario reingresado con exito', 'icono' => 'success');
         } else {
@@ -153,8 +148,9 @@ class Usuarios extends Controller
         die();
     }
 
-    public function salir (){
+    public function salir()
+    {
         session_destroy();
-        header("location:".base_url);
+        header("location:" . base_url);
     }
 }
