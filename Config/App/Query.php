@@ -13,7 +13,6 @@ class Query extends Conexion
 
     public function select(string $sql)
     {
-        //$this->sql = $sql;
         $query = $this->con->prepare($sql);
         $query->execute();
         $data= $query->fetch(PDO::FETCH_ASSOC);
@@ -22,7 +21,6 @@ class Query extends Conexion
 
         public function selectAll(string $sql)
     {
-        //$this->sql = $sql;
         $query = $this->con->prepare($sql);
         $query->execute();
         $data= $query->fetchAll(PDO::FETCH_ASSOC);

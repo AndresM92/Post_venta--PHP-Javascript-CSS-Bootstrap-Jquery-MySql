@@ -65,8 +65,8 @@ class CategoriasModel extends Query
     {
         $this->id = $id;
         $this->estado = $estado;
-        $sql = "UPDATE categorias SET estado=? WHERE id=?";
-        $datos = array($this->estado,$this->id);
+        $sql = "DELETE FROM categorias WHERE id=?";
+        $datos = array($this->id);
         $data = $this->save($sql, $datos);
         return $data;
     }

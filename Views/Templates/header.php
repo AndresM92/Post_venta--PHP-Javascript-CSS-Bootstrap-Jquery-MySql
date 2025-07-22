@@ -41,9 +41,9 @@
                     <div class="nav">
 
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tools mr-2"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-tools mr-2 text-primary"></i></div>
                             Configuración
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
                         </a>
 
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -54,18 +54,23 @@
                         </div>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Clientes">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users mr-2"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-users mr-2 text-primary"></i></div>
                             Clientes
                         </a>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Medidas">
-                            <div class="sb-nav-link-icon"><i class="fas fa-scale-unbalanced mr-2"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-scale-unbalanced mr-2 text-primary"></i></div>
                             Medidas
                         </a>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Categorias">
-                            <div class="sb-nav-link-icon"><i class="fa fa-table-list mr-2"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa fa-table-list mr-2 text-primary"></i></div>
                             Categorias
+                        </a>
+
+                        <a class="nav-link" href="<?php echo base_url; ?>Productos">
+                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt mr-2 text-primary"></i></div>
+                            Productos
                         </a>
 
                     </div>

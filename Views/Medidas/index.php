@@ -2,7 +2,7 @@
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">Medidas</li>
 </ol>
-<button class="btn btn-primary mb-2" onclick="frmMedidas();">Nuevo <i class="fas fa-plus"></i></button>
+<button class="btn btn-primary mb-2" onclick="frmMeasures();">Nuevo <i class="fas fa-plus"></i></button>
 <table class="table table-light" id="ta_Medidas">
     <thead class="thead-dark">
         <tr>

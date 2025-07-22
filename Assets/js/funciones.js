@@ -1,6 +1,6 @@
 //////////////////////////////////////Usuarios///////////////////////////////////////////
 
-let t_Usuarios,t_Clientes,t_Categorias,t_Cajas,t_Medidas;
+let t_Usuarios,t_Clientes,t_Categorias,t_Cajas,t_Medidas,t_Productos;
 
 function frmLogin(e) {
     /*window.location="http://localhost/pos_venta/Usuarios";*/
@@ -120,6 +120,26 @@ $(document).ready(function () {
             { data: 'id' },
             { data: 'nombre' },
             { data: 'nombre_corto' },
+            { data: 'estado' },
+            { data: 'acciones' }
+        ]
+
+    });
+});
+
+$(document).ready(function () {
+    t_Productos = $('#ta_Productos').DataTable({
+        ajax: {
+            url: base_url + "Productos/listar",
+            dataSrc: "",
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'imagen' },
+            { data: 'codigo' },
+            { data: 'descripcion' },
+            { data: 'precio_venta' },
+            { data: 'cantidad'},
             { data: 'estado' },
             { data: 'acciones' }
         ]
@@ -867,7 +887,7 @@ function btn_delete_Box(id) {
     })
 }
 
-function btn_reingre_Box(id) {
+/*function btn_reingre_Box(id) {
 
     Swal.fire({
         title: "Estas seguro de reingresar la Caja?",
@@ -906,7 +926,7 @@ function btn_reingre_Box(id) {
             }
         }
     })
-}
+}*/
 
 //////////////////////////////////////Medidas////////////////////////////////////////////
 
@@ -1055,7 +1075,8 @@ function btn_delete_Measure(id) {
     })
 }
 
-function btn_reingre_Measure(id) {
+/*function btn_reingre_Measure(id) {
+
 
     Swal.fire({
         title: "Estas seguro de reingresar la Medida?",
@@ -1094,4 +1115,220 @@ function btn_reingre_Measure(id) {
             }
         }
     })
+}*/
+
+/////////////////////////////////////////////////Productos///////////////////////////////////
+function frmProducts() {
+    document.getElementById("title").innerHTML = "Nuevo Producto";
+    document.getElementById("btnAction").innerHTML = "Registrar";
+    document.getElementById("frmProduct").reset();
+    document.getElementById("id").value = "";
+    $("#new_product").modal("show");
+}
+
+function register_product(e) {
+    e.preventDefault();
+
+    const codigo = document.getElementById("codigo");
+    const descripcion = document.getElementById("nombre");
+    const precio_compra = document.getElementById("precio_compra");
+    const precio_venta = document.getElementById("precio_venta");
+    const id_medida = document.getElementById("medida");
+    const id_categoria = document.getElementById("categoria");
+
+    // Validaciones
+    if (codigo.value == "" || descripcion.value == "" || precio_compra.value == ""|| precio_venta.value == "") {
+        Swal.fire({
+            icon: "error",
+            title: "Todos los campos son obligatorios",
+            timer: 3000
+        });
+    } else {
+        const url = base_url + "Productos/registrar";
+        const frm = document.getElementById("frmProduct");
+        const http = new XMLHttpRequest();
+        http.open("POST", url, true);
+        http.send(new FormData(frm));
+
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const contentType = this.getResponseHeader('Content-Type');
+                if (contentType && contentType.includes('application/json')) {
+                    try {
+
+                        const response = JSON.parse(this.responseText);
+                        if (response.msg == "Producto registrado con éxito") {
+                            Swal.fire({
+                                title: "Producto registrado con exito",
+                                icon: "success",
+                                draggable: true,
+                                timer: 3000
+                            });
+                            frm.reset();
+                            $("#new_product").modal("hide");
+                            t_Productos.ajax.reload();
+
+                        } else if (response.msg == "Producto modificado con éxito") {
+                            Swal.fire({
+                                title: "Producto modificado con éxito",
+                                icon: "success",
+                                draggable: true,
+                                timer: 3000
+                            });
+                            //frm.reset();
+                            $("#new_product").modal("hide");
+                            t_Productos.ajax.reload(null, true);
+
+
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: response.msg,
+                                timer: 3000
+                            });
+                        }
+                    } catch (e) {
+                        console.error("Error al parsear JSON:", e);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hubo un problema con la respuesta del servidor.',
+                            timer: 3000
+                        });
+                    }
+                } else {
+                    console.error("La respuesta del servidor no es JSON. Respuesta recibida:", this.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'La respuesta del servidor no es válida.',
+                        timer: 3000
+                    });
+                }
+            }
+        };
+    }
+}
+
+function btn_edit_Product(id) {
+    document.getElementById("title").innerHTML = "Actualizar Producto";
+    document.getElementById("btnAction").innerHTML = "Modificar";
+    const url = base_url + "Productos/editar/" + id;
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+
+            document.getElementById("id").value = res.id;
+            document.getElementById("codigo").value = res.codigo;
+            document.getElementById("nombre").value = res.descripcion;
+            document.getElementById("precio_compra").value = res.precio_compra;
+            document.getElementById("precio_venta").value = res.precio_venta;
+            document.getElementById("medida").value = res.id_medida;
+            document.getElementById("categoria").value = res.id_categoria;
+            $("#new_product").modal("show");
+        }
+    };
+}
+
+function btn_delete_Product(id) {
+
+    Swal.fire({
+        title: "Estas seguro de eliminar?",
+        text: "El Producto no se eliminara de forma permanente, solo pasara a estado inactivo",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Productos/eliminar/" + id;
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    if (response.msg == "Producto eliminado con exito") {
+                        Swal.fire(
+                            response.msg,
+                            '',
+                            "success"
+                        )
+                        t_Productos.ajax.reload();
+
+                    } else {
+                        Swal.fire(
+                            response.msg,
+                            response,
+                            "error"
+                        )
+                    }
+                }
+            }
+        }
+    })
+}
+
+function btn_reingre_Product(id) {
+
+    Swal.fire({
+        title: "Estas seguro de reingresar el Producto?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Productos/reingresar/" + id;
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    if (response.msg == "Producto reingresado con exito") {
+                        Swal.fire(
+                            response.msg,
+                            '',
+                            "success"
+                        )
+                        t_Productos.ajax.reload();
+
+                    } else {
+                        Swal.fire(
+                            response.msg,
+                            response,
+                            "error"
+                        )
+                    }
+                }
+            }
+        }
+    })
+}
+
+function preview_foto(e){
+
+    const url=e.target.files[0];
+    const urlTmp=URL.createObjectURL(url);
+    document.getElementById("img-preview").src=urlTmp;
+    document.getElementById("icon-image").classList.add("d-none");
+    document.getElementById("icon-cerrar").innerHTML=
+    `<button class="btn btn-danger" onclick="deleteImg(event)"> <i class="fas fa-times"></i> </button>
+    ${url['name']}`;
+}
+
+function deleteImg(e){
+    document.getElementById("icon-cerrar").innerHTML='';
+    document.getElementById("icon-image").classList.remove("d-none");
+    document.getElementById("img-preview").src='';
 }

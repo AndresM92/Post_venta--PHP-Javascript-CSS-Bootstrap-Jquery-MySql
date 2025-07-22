@@ -41,8 +41,6 @@ class Categorias extends Controller
                 '<div>
                 <button class="btn btn-primary" type="button" onclick="btn_edit_Category(' . $data[$i]['id'] . ');"><i class= "fas fa-edit"></i></button>
                 <button id="eliminar_' . $data[$i]['id'] . '" class="btn btn-danger" type="button" '.$btn_disabled_eliminar.' onclick="btn_delete_Category(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
-                <button id="reingresar_' . $data[$i]['id'] . '"class="btn btn-success"  type="button" '.$btn_disabled_reingresar.' onclick="btn_reingre_Category(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
-
              </div>';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -101,7 +99,7 @@ class Categorias extends Controller
         die();
     }
 
-    public function reingresar(int $id)
+   /* public function reingresar(int $id)
     {
 
         $data = $this->model->reingresar_category($id,1);
@@ -113,7 +111,7 @@ class Categorias extends Controller
 
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
-    }
+    }*/
 
     public function salir (){
         session_destroy();

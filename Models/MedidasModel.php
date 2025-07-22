@@ -24,7 +24,7 @@ class MedidasModel extends Query
         $verificar = "SELECT * FROM medidas WHERE nombre='$this->nombre'";
         $existe = $this->select($verificar);
         if (empty($existe)) {
-            $sql = "INSERT INTO medidas (nombre,nombre_corto) VALUES (??)";
+            $sql = "INSERT INTO medidas (nombre,nombre_corto) VALUES (?,?)";
             $datos = array($this->nombre,$this->nombre_corto);
             $data = $this->save($sql, $datos);
             if ($data == 1) {
@@ -38,14 +38,14 @@ class MedidasModel extends Query
         return $res;
     }
 
-    public function(string $caja, int $id)
+    public function modi_measure(string $nombre, string $nombre_corto, int $id)
     {
-
-        $this->caja = $caja;
+        $this->nombre=$nombre;
+        $this->nombre_corto = $nombre_corto;
         $this->id = $id;
 
-        $sql = "UPDATE cajas SET caja=? WHERE id=?";
-        $datos = array($this->caja,$this->id);
+        $sql = "UPDATE medidas SET nombre=?, nombre_corto=? WHERE id=?";
+        $datos = array($this->nombre,$this->nombre_corto,$this->id);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "upda";
@@ -55,24 +55,24 @@ class MedidasModel extends Query
         return $res;
     }
 
-    public function edit_box(int $id)
+    public function edit_measure(int $id)
     {
-        $sql = "SELECT * FROM cajas WHERE id='$id'";
+        $sql = "SELECT * FROM medidas WHERE id='$id'";
         $data = $this->select($sql);
         return $data;
     }
 
-    public function delete_box(int $id, int $estado)
+    public function delete_measure(int $id, int $estado)
     {
         $this->id = $id;
         $this->estado = $estado;
-        $sql = "UPDATE cajas SET estado=? WHERE id=?";
-        $datos = array($this->estado,$this->id);
+        $sql = "DELETE FROM medidas WHERE id=?";
+        $datos = array($this->id);
         $data = $this->save($sql, $datos);
         return $data;
     }
 
-    public function reingresar_box(int $id, int $estado)
+   /* public function reingresar_box(int $id, int $estado)
     {
         $this->id = $id;
         $this->estado = $estado;
@@ -80,5 +80,5 @@ class MedidasModel extends Query
         $datos = array($this->estado, $this->id);
         $data = $this->save($sql, $datos);
         return $data;
-    }
+    } */
 }
