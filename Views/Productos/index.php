@@ -88,6 +88,7 @@
                                         <label for="imagen" id="icon-image" class="btn btn-primary"><i class="fas fa-image"></i></label>
                                         <span id="icon-cerrar"></span>
                                         <input id="imagen" class="d-none" type="file" name="imagen" onchange="preview_foto(event)">
+                                        <input type="hidden" id="foto_actual" name="foto_actual">
                                         <img class="img-thumbnail" id="img-preview">
                                     </div>
                                 </div>

@@ -1,6 +1,6 @@
 //////////////////////////////////////Usuarios///////////////////////////////////////////
 
-let t_Usuarios,t_Clientes,t_Categorias,t_Cajas,t_Medidas,t_Productos;
+let t_Usuarios, t_Clientes, t_Categorias, t_Cajas, t_Medidas, t_Productos;
 
 function frmLogin(e) {
     /*window.location="http://localhost/pos_venta/Usuarios";*/
@@ -25,7 +25,7 @@ function frmLogin(e) {
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
                 if (res.msg == "Iniciando sesion") {
-                    
+
                     window.location.href = base_url + "Usuarios";
                 } else {
                     document.getElementById("alerta").classList.remove("d-none");
@@ -139,7 +139,7 @@ $(document).ready(function () {
             { data: 'codigo' },
             { data: 'descripcion' },
             { data: 'precio_venta' },
-            { data: 'cantidad'},
+            { data: 'cantidad' },
             { data: 'estado' },
             { data: 'acciones' }
         ]
@@ -365,7 +365,7 @@ function frmCustomers() {
     document.getElementById("frmCustomerr").reset();
     document.getElementById("id").value = "";
     $("#new_customer").modal("show");
-     
+
 }
 
 function register_customer(e) {
@@ -377,7 +377,7 @@ function register_customer(e) {
     const confirmar = document.getElementById("direccion");
 
     // Validaciones
-    if (cc.value == "" || nombre.value == "" || telefono.value == ""|| direccion.value == "") {
+    if (cc.value == "" || nombre.value == "" || telefono.value == "" || direccion.value == "") {
         Swal.fire({
             icon: "error",
             title: "Todos los campos son obligatorios",
@@ -463,7 +463,7 @@ function btn_edit_Customer(id) {
             document.getElementById("cc").value = res.cc;
             document.getElementById("nombre").value = res.nombre;
             document.getElementById("telefono").value = res.telefono;
-            document.getElementById("direccion").value=res.direccion;
+            document.getElementById("direccion").value = res.direccion;
             $("#new_customer").modal("show");
         }
     };
@@ -560,7 +560,7 @@ function frmCategories() {
     document.getElementById("frmCategoryy").reset();
     document.getElementById("id").value = "";
     $("#new_category").modal("show");
-     
+
 }
 
 function register_category(e) {
@@ -750,11 +750,11 @@ function frmBoxes() {
     document.getElementById("frmBoxx").reset();
     document.getElementById("id").value = "";
     $("#new_box").modal("show");
-     
+
 }
 
 function register_Box(e) {
-    e.preventDefault(); 
+    e.preventDefault();
     const caja = document.getElementById("caja");
 
     if (caja.value == "") {
@@ -936,13 +936,13 @@ function frmMeasures() {
     document.getElementById("frmMeasuress").reset();
     document.getElementById("id").value = "";
     $("#new_measure").modal("show");
-     
+
 }
 
 function register_Measure(e) {
-    e.preventDefault(); 
+    e.preventDefault();
     const nombre = document.getElementById("nombre");
-     const nombre_corto = document.getElementById("nombre_corto");
+    const nombre_corto = document.getElementById("nombre_corto");
 
     if (nombre.value == "" || nombre_corto.value == "") {
         Swal.fire({
@@ -1124,6 +1124,7 @@ function frmProducts() {
     document.getElementById("frmProduct").reset();
     document.getElementById("id").value = "";
     $("#new_product").modal("show");
+    deleteImg();
 }
 
 function register_product(e) {
@@ -1137,7 +1138,7 @@ function register_product(e) {
     const id_categoria = document.getElementById("categoria");
 
     // Validaciones
-    if (codigo.value == "" || descripcion.value == "" || precio_compra.value == ""|| precio_venta.value == "") {
+    if (codigo.value == "" || descripcion.value == "" || precio_compra.value == "" || precio_venta.value == "") {
         Swal.fire({
             icon: "error",
             title: "Todos los campos son obligatorios",
@@ -1228,7 +1229,13 @@ function btn_edit_Product(id) {
             document.getElementById("precio_venta").value = res.precio_venta;
             document.getElementById("medida").value = res.id_medida;
             document.getElementById("categoria").value = res.id_categoria;
-            $("#new_product").modal("show");
+            document.getElementById("img-preview").src = base_url + 'Assets/img/' + res.foto;
+            document.getElementById("icon-cerrar").innerHTML =
+                `<button class="btn btn-danger" onclick="deleteImg()"> 
+                <i class="fas fa-times"></i> </button>`;
+            document.getElementById("icon-image").classList.add("d-none");
+            document.getElementById("foto_actual").value=res.foto;
+                $("#new_product").modal("show");
         }
     };
 }
@@ -1316,19 +1323,22 @@ function btn_reingre_Product(id) {
     })
 }
 
-function preview_foto(e){
+function preview_foto(e) {
 
-    const url=e.target.files[0];
-    const urlTmp=URL.createObjectURL(url);
-    document.getElementById("img-preview").src=urlTmp;
+    const url = e.target.files[0];
+    const urlTmp = URL.createObjectURL(url);
+    document.getElementById("img-preview").src = urlTmp;
     document.getElementById("icon-image").classList.add("d-none");
-    document.getElementById("icon-cerrar").innerHTML=
-    `<button class="btn btn-danger" onclick="deleteImg(event)"> <i class="fas fa-times"></i> </button>
+    document.getElementById("icon-cerrar").innerHTML =
+        `<button class="btn btn-danger" onclick="deleteImg()"> <i class="fas fa-times"></i> </button>
     ${url['name']}`;
 }
 
-function deleteImg(e){
-    document.getElementById("icon-cerrar").innerHTML='';
+function deleteImg() {
+    document.getElementById("icon-cerrar").innerHTML = '';
     document.getElementById("icon-image").classList.remove("d-none");
-    document.getElementById("img-preview").src='';
+    document.getElementById("img-preview").src = '';
+    document.getElementById("imagen").value = '';
+    document.getElementById("foto_actual").value = '';
+
 }

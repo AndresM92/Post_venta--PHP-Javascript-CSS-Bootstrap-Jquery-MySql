@@ -26,7 +26,7 @@ class Productos extends Controller
         $btn_disabled_eliminar = '';
         $data = $this->model->getProductos();
         for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['imagen'] = '<img class="img-thumbnail" src="'.base_url."Assets/img/".$data[$i]['foto'].'">';
+            $data[$i]['imagen'] = '<img class="img-thumbnail" src="' . base_url . "Assets/img/" . $data[$i]['foto'] . '"width="100">';
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
                 $btn_disabled = 'disabled';
@@ -40,7 +40,7 @@ class Productos extends Controller
             $data[$i]['acciones'] =
                 '<div>
                 <button class="btn btn-primary" type="button" onclick="btn_edit_Product(' . $data[$i]['id'] . ');"><i class= "fas fa-edit"></i></button>
-                <button class="btn btn-danger" type="button"'. $btn_disabled_eliminar.' onclick="btn_delete_Product(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
+                <button class="btn btn-danger" type="button"' . $btn_disabled_eliminar . ' onclick="btn_delete_Product(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
                 <button   id="reingresar_' . $data[$i]['id'] . '" class="btn btn-success"  type="button" ' . $btn_disabled . ' onclick="btn_reingre_Product(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
 
              </div>';
@@ -81,34 +81,50 @@ class Productos extends Controller
         //$cantidad = $_POST["cantidad"];
         $id_medida = $_POST["medida"];
         $id_categoria = $_POST["categoria"];
-        $img=$_FILES['imagen'];
-        $name=$img['name'];
-        $tmpname=$img['tmp_name'];
-        $destino="Assets/img/".$name;
+        $img = $_FILES['imagen'];
+        $name = $img['name'];
+        $tmpname = $img['tmp_name'];
+        $destino = "Assets/img/" . $name;
+        $fecha = date("YmdHis");
         $id = $_POST["id"];
 
-        if(empty($name)){
-            $name="default.jpg";
-        }
 
-        if (empty($codigo) || empty($nombre) || empty($precio_compra)||empty($precio_venta)) {
+        if (empty($codigo) || empty($nombre) || empty($precio_compra) || empty($precio_venta)) {
             $msg = array('msg' => 'Todos los campos son obligatorios', 'icono' => 'info');
         } else {
-            if (empty($id)){
-                
-                    $data = $this->model->registrar_producto($codigo, $nombre, $precio_compra, $precio_venta, $id_medida, $id_categoria,$name);
-                    if ($data == "ok") {
-                        $msg = array('msg' => 'Producto registrado con éxito', 'icono' => 'success');
-                        move_uploaded_file($tmpname,$destino);
-                    } else if ($data == "existe") {
-                        $msg = array('msg' => 'El producto ya existe', 'icono' => 'info');
-                    } else {
-                        $msg = array('msg' => 'Error al registrar el producto', 'icono' => 'error');
-                    }
-                
+            if (!empty($name)) {
+                $imgNombre = $fecha . "jpg";
+                $destino = "Assets/img/" . $imgNombre;
+            } elseif (!empty($_POST['foto_actual']) && empty($name)) {
+                $imgNombre = $_POST['foto_actual'];
             } else {
-                $data = $this->model->modi_producto($codigo, $nombre, $precio_compra, $precio_venta, $id_medida, $id_categoria, $name,$id);
+                $imgNombre = "default.jpg";
+            }
+            if (empty($id)) {
+
+                $data = $this->model->registrar_producto($codigo, $nombre, $precio_compra, $precio_venta, $id_medida, $id_categoria, $imgNombre);
+                if ($data == "ok") {
+                    $msg = array('msg' => 'Producto registrado con éxito', 'icono' => 'success');
+                    if (!empty($name)) {
+                        move_uploaded_file($tmpname, $destino);
+                    }
+                } else if ($data == "existe") {
+                    $msg = array('msg' => 'El producto ya existe', 'icono' => 'info');
+                } else {
+                    $msg = array('msg' => 'Error al registrar el producto', 'icono' => 'error');
+                }
+            } else {
+                $imgDelete = $this->model->edit_product($id);
+                if ($imgDelete['foto'] != 'default.jpg' || !empty($imgDelete['foto'])) {
+                    if (file_exists("Assets/img/" . $imgDelete['foto'])) {
+                        unlink("Assets/img/" . $imgDelete['foto']);
+                    }
+                }
+                $data = $this->model->modi_producto($codigo, $nombre, $precio_compra, $precio_venta, $id_medida, $id_categoria, $imgNombre, $id);
                 if ($data == "upda") {
+                    if (!empty($name)) {
+                        move_uploaded_file($tmpname, $destino);
+                    }
                     $msg = array('msg' => 'Producto modificado con éxito', 'icono' => 'success');
                 } else {
                     $msg = array('msg' => 'Error al modificar el usuario', 'icono' => 'error');
@@ -120,7 +136,7 @@ class Productos extends Controller
         die();
     }
 
-    
+
 
     public function editar(int $id)
     {
