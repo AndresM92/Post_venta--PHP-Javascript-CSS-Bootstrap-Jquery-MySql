@@ -73,6 +73,11 @@
                             Productos
                         </a>
 
+                        <a class="nav-link" href="<?php echo base_url; ?>Compras">
+                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt mr-2 text-primary"></i></div>
+                            Compras
+                        </a>
+
                     </div>
                 </div>
             </nav>
