@@ -1382,4 +1382,103 @@ function Calc_Price(e) {
     const cant = document.getElementById("cantidad").value;
     const precio = document.getElementById("precio").value;
     document.getElementById("sub_total").value = precio * cant;
+    if (e.which == 13) {
+        if (cant > 0) {
+            const url = base_url + "Compras/ingresar/";
+            const frm = document.getElementById("frmBuy");
+            const http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.send(new FormData(frm));
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    if (response.msg == "El producto fue ingresado con exito") {
+                        Swal.fire({
+                            title: "Producto fue registrado con exito",
+                            icon: "success",
+                            draggable: true,
+                            timer: 3000
+                        });
+                        frm.reset();
+
+
+                    } else if (response.msg == "Error al ingresar el producto") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: response.msg,
+                            timer: 3000
+                        });
+                        frm.reset();
+                    }
+                    upload_Detalis();
+                }
+            }
+        }
+    }
 }
+
+upload_Detalis();
+
+function upload_Detalis() {
+
+    const url = base_url + "Compras/listar/";
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            //console.log(this.responseText);
+            const res = JSON.parse(this.responseText);
+            let html = '';
+            res.detalle.forEach(row => {
+                html += `<tr> 
+                <td>${row["id"]}</td>
+                <td>${row["descripcion"]}</td>
+                <td>${row["cantidad"]}</td>
+                <td>${row["precio"]}</td>
+                <td>${row["sub_total"]}</td>
+                <td>
+                    <button class="btn btn-danger type="button" onclick="deleteDetails(${row["id"]})">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr> `;
+            });
+            document.getElementById("tblDetails").innerHTML = html;
+            document.getElementById("total").value = res.total_pagar.total;
+        }
+    }
+}
+
+function deleteDetails(id) {
+
+    const url = base_url + "Compras/delete/" + id;
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+             const response = JSON.parse(this.responseText);
+            if (response.msg == "El producto fue eliminado de la lista") {
+                Swal.fire({
+                    title: "El producto fue eliminado de la lista",
+                    icon: "success",
+                    draggable: true,
+                    timer: 3000
+                });
+            } else if (response.msg == "Error al eliminar el producto") {
+                Swal.fire({
+                    icon: 'error',
+                    title: response.msg,
+                    timer: 3000
+                });
+            }
+            upload_Detalis();
+        }
+    }
+
+}
+
+
+
+
