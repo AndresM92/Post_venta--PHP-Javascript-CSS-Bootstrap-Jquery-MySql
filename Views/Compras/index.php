@@ -62,7 +62,7 @@
         <div class="form-group">
             <label for="total" class="font-weight-bold">Total</label>
             <input id="total" class="form-control" type="text" name="total" placeholder="Total" disabled>
-            <button class="btn btn-primary mt-2 btn-block" type="button">Generar Compra</button>
+            <button class="btn btn-primary mt-2 btn-block" type="button" onclick="generate_purchase()">Generar Compra</button>
         </div>
     </div>
 </div>

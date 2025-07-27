@@ -1400,11 +1400,9 @@ function Calc_Price(e) {
                             timer: 3000
                         });
                         frm.reset();
-
-
-                    } else if (response.msg == "Error al ingresar el producto") {
+                    } else if (response.msg == "Se agrego la cantidad adicional") {
                         Swal.fire({
-                            icon: 'error',
+                            icon: 'success',
                             title: response.msg,
                             timer: 3000
                         });
@@ -1476,6 +1474,46 @@ function deleteDetails(id) {
             upload_Detalis();
         }
     }
+
+}
+
+function generate_purchase(){
+
+        Swal.fire({
+        title: "Estas seguro de realizar la Compra?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "compras/registrarCompra/";
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    if (response.msg == "Se ha generado la Compra") {
+                        Swal.fire(
+                            'Compra Generada',
+                            '',
+                            "success"
+                        )
+                    } else {
+                        Swal.fire(
+                            response.msg,
+                            response,
+                            "error"
+                        )
+                    }
+                }
+            }
+        }
+    })
 
 }
 
