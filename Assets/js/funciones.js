@@ -1503,6 +1503,11 @@ function generate_purchase(){
                             '',
                             "success"
                         )
+                        const ruta= base_url+'Compras/generarPdf/'+ response.id_compra;
+                        window.open(ruta);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 300);
                     } else {
                         Swal.fire(
                             response.msg,

@@ -114,10 +114,11 @@ class ComprasModel extends Query
         return $data;
     }
 
-    public function register_details_purchase(int $id_compra,int $id_producto,int $cantidad,string $precio,string $sub_total){
+    public function register_details_purchase(int $id_compra, int $id_producto, int $cantidad, string $precio, string $sub_total)
+    {
 
         $sql = "INSERT INTO detalle_compras (id_compra,id_producto,cantidad,precio,sub_total) VALUES(?,?,?,?,?)";
-        $datos = array($id_compra,$id_producto,$cantidad,$precio,$sub_total);
+        $datos = array($id_compra, $id_producto, $cantidad, $precio, $sub_total);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
@@ -126,6 +127,24 @@ class ComprasModel extends Query
         }
         return $res;
     }
+
+    public function getEmpresa()
+    {
+        $sql = "SELECT * FROM configuracion";
+        $data = $this->select($sql);
+        return $data;
+    }
+
+    public function emptyDetails(int $id_usuario)
+    {
+        $sql = "DELETE FROM detalle WHERE id_usuario=?";
+        $delete = array($id_usuario);
+        $data = $this->save($sql, $delete);
+        if ($data == 1) {
+            $res = "ok";
+        } else {
+            $res = "error";
+        }
+        return $res;
+    }
 }
-
-

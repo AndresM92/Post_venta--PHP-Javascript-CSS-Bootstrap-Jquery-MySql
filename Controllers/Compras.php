@@ -91,20 +91,59 @@ class Compras extends Controller
         $data = $this->model->r_buy($total["total"]);
         if ($data == "ok") {
 
-            $id_compra=$this->model->id_compra();
+            $id_compra = $this->model->id_compra();
             $details = $this->model->getDetails($id_usuario);
-            foreach($details as $row){
-                $cantidad=$row["cantidad"];
-                $precio=$row["precio"];
-                $id_producto=$row["id_producto"];
-                $sub_total=$cantidad*$precio;
-                $this->model->register_details_purchase($id_compra["id"],$id_producto,$cantidad,$precio,$sub_total);
+            foreach ($details as $row) {
+                $cantidad = $row["cantidad"];
+                $precio = $row["precio"];
+                $id_producto = $row["id_producto"];
+                $sub_total = $cantidad * $precio;
+                $this->model->register_details_purchase($id_compra["id"], $id_producto, $cantidad, $precio, $sub_total);
             }
-            $msg = array('msg' => 'Se ha generado la Compra', 'icono' => 'success');
+            $empty_details=$this->model->emptyDetails($id_usuario);
+            if ($empty_details=='ok') {
+
+                $msg = array('msg' => 'Se ha generado la Compra', 'id_compra' => $id_compra["id"]);
+            }
+
         } else {
             $msg = array('msg' => 'error al realizar la compra', 'icono' => 'error');
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
+    }
+
+    public function generarPdf($id_compra)
+    {
+        
+        $empresa = $this->model->getEmpresa();
+        require('libraries/fpdf/fpdf.php');
+        $pdf = new FPDF('P', 'mm', array(80, 200));
+        $pdf->AddPage();
+        $pdf->SetTitle("Reporte de Compra");
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->Cell(65, 10, $empresa["nombre"], 0, 1, 'C');
+        $pdf->Image(base_url . 'Assets/img/logo.png', 60, 18, 15, 15);
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(18, 5, 'NIT: ', 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(18, 5, $empresa["nit"], 0, 1, 'L');
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(18, 5, utf8_decode('Teléfono: '), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(18, 5, $empresa["telefono"], 0, 1, 'L');
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(18, 5, utf8_decode('Dirección: '), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(18, 5, $empresa["direccion"], 0, 1, 'L');
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(18, 5, 'Folio:', 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(18, 5, $id_compra, 0, 1, 'L');
+        $pdf->Output();
     }
 }
