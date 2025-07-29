@@ -3,7 +3,7 @@
     <li class="breadcrumb-item active">Productos</li>
 </ol>
 <button class="btn btn-primary mb-2" onclick="frmProducts();">Nuevo <i class="fas fa-plus"></i></button>
-<table class="table table-light" id="ta_Productos">
+<table class="table " id="ta_Productos">
     <thead class="thead-dark">
         <tr>
             <th>Id</th>

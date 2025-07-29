@@ -11,6 +11,8 @@
     <link href="<?php echo base_url; ?>Assets/css/style.min.css" rel="stylesheet" />
     <link href="<?php echo base_url; ?>Assets/css/styles.css" rel="stylesheet" />
     <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
+    <link  rel="stylesheet" href="<?php echo base_url; ?>Assets/DataTables/dataTables.min.css"></link>
+    
 </head>
 
 <body class="sb-nav-fixed">
@@ -41,42 +43,51 @@
                     <div class="nav">
 
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tools mr-2 text-primary"></i></div>
-                            Configuración
+                            <div class="sb-nav-link-icon"><i class="fas fa-cogs mr-2 fa-2x"></i></div>
+                            Administracion
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
                         </a>
 
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<?php echo base_url; ?>Usuarios"><i class="fas fa-user mr-2"></i>Usuarios</a>
-                                <a class="nav-link" href="<?php echo base_url; ?>Cajas">Cajas</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Usuarios"><i class="fas fa-user mr-2 text-primary"></i>Usuarios</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Cajas"><i class="fas fa-box mr-2 text-primary"></i>Cajas</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Administracion"><i class="fas fa-tools mr-2 text-primary"></i>Configuracion</a>
                             </nav>
                         </div>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Clientes">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users mr-2 text-primary"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-users mr-2 fa-2x"></i></div>
                             Clientes
                         </a>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Medidas">
-                            <div class="sb-nav-link-icon"><i class="fas fa-scale-unbalanced mr-2 text-primary"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-scale-unbalanced mr-2 fa-2x"></i></div>
                             Medidas
                         </a>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Categorias">
-                            <div class="sb-nav-link-icon"><i class="fa fa-table-list mr-2 text-primary"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa fa-table-list mr-2 fa-2x"></i></div>
                             Categorias
                         </a>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Productos">
-                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt mr-2 text-primary"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-product-hunt mr-2 fa-2x"></i></div>
                             Productos
                         </a>
 
-                        <a class="nav-link" href="<?php echo base_url; ?>Compras">
-                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt mr-2 text-primary"></i></div>
-                            Compras
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCompras" aria-expanded="false" aria-controls="collapseCompras">
+                            <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart fa-2x"></i></div>
+                            Entradas
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
                         </a>
+
+                        <div class="collapse" id="collapseCompras" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<?php echo base_url; ?>Compras"><i class="fas fa-shopping-cart mr-2 text-primary"></i>Nueva Compra</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Compras/historial"><i class="fas fa-list mr-2 text-primary"></i>Historial Compras</a>
+                            </nav>
+                        </div>
 
                     </div>
                 </div>

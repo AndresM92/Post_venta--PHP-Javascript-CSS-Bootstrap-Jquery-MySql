@@ -1,6 +1,6 @@
 //////////////////////////////////////Usuarios///////////////////////////////////////////
 
-let t_Usuarios, t_Clientes, t_Categorias, t_Cajas, t_Medidas, t_Productos;
+let t_Usuarios, t_Clientes, t_Categorias, t_Cajas, t_Medidas, t_Productos, t_historial_c;
 
 function frmLogin(e) {
     /*window.location="http://localhost/pos_venta/Usuarios";*/
@@ -128,20 +128,43 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+    t_historial_c = $('#t_historial_buy').DataTable({
+        ajax: {
+            url: base_url + "Compras/list_historial",
+            dataSrc: "",
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'total' },
+            { data: 'fecha' },
+            { data: 'acciones' }
+        ]
+
+    });
+});
+
+$(document).ready(function () {
     t_Productos = $('#ta_Productos').DataTable({
         ajax: {
             url: base_url + "Productos/listar",
             dataSrc: "",
         },
         columns: [
-            { data: 'id' },
-            { data: 'imagen' },
-            { data: 'codigo' },
-            { data: 'descripcion' },
-            { data: 'precio_venta' },
-            { data: 'cantidad' },
-            { data: 'estado' },
-            { data: 'acciones' }
+            { data: 'id'},
+            { data: 'imagen'},
+            { data: 'codigo'},
+            { data: 'descripcion'},
+            { data: 'precio_venta'},
+            { data: 'cantidad'},
+            { data: 'estado'},
+            { data: 'acciones'}
+        ],
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
         ]
 
     });
@@ -1415,7 +1438,10 @@ function Calc_Price(e) {
     }
 }
 
-upload_Detalis();
+if (document.getElementById("tblDetails")) {
+    upload_Detalis();
+}
+
 
 function upload_Detalis() {
 
@@ -1456,7 +1482,7 @@ function deleteDetails(id) {
     http.send();
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-             const response = JSON.parse(this.responseText);
+            const response = JSON.parse(this.responseText);
             if (response.msg == "El producto fue eliminado de la lista") {
                 Swal.fire({
                     title: "El producto fue eliminado de la lista",
@@ -1477,9 +1503,9 @@ function deleteDetails(id) {
 
 }
 
-function generate_purchase(){
+function generate_purchase() {
 
-        Swal.fire({
+    Swal.fire({
         title: "Estas seguro de realizar la Compra?",
         icon: "warning",
         showCancelButton: true,
@@ -1503,7 +1529,7 @@ function generate_purchase(){
                             '',
                             "success"
                         )
-                        const ruta= base_url+'Compras/generarPdf/'+ response.id_compra;
+                        const ruta = base_url + 'Compras/generarPdf/' + response.id_compra;
                         window.open(ruta);
                         setTimeout(() => {
                             window.location.reload();
@@ -1522,6 +1548,33 @@ function generate_purchase(){
 
 }
 
+function modiEmpresa(params) {
+
+    const frm = document.getElementById('frmEmpresa');
+    const url = base_url + "Administracion/modificar";
+    const http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.send(new FormData(frm));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            if (response.msg == "Datos de la empresa modificados con exito") {
+                Swal.fire(
+                    response.msg,
+                    '',
+                    "success"
+                )
+            } else {
+                Swal.fire(
+                    response.msg,
+                    response,
+                    "error"
+                )
+            }
+        }
+    }
+}
 
 
 

@@ -99,13 +99,15 @@ class Compras extends Controller
                 $id_producto = $row["id_producto"];
                 $sub_total = $cantidad * $precio;
                 $this->model->register_details_purchase($id_compra["id"], $id_producto, $cantidad, $precio, $sub_total);
+                $stock_actual=$this->model->getPro($id_producto);
+                $stock=$stock_actual["cantidad"] + $cantidad;
+                $this->model->updateStock($stock,$id_producto);
             }
-            $empty_details=$this->model->emptyDetails($id_usuario);
-            if ($empty_details=='ok') {
+            $empty_details = $this->model->emptyDetails($id_usuario);
+            if ($empty_details == 'ok') {
 
                 $msg = array('msg' => 'Se ha generado la Compra', 'id_compra' => $id_compra["id"]);
             }
-
         } else {
             $msg = array('msg' => 'error al realizar la compra', 'icono' => 'error');
         }
@@ -115,11 +117,15 @@ class Compras extends Controller
 
     public function generarPdf($id_compra)
     {
-        
+
         $empresa = $this->model->getEmpresa();
+        $productos = $this->model->getProBuy($id_compra);
+        $total = 0;
+
         require('libraries/fpdf/fpdf.php');
-        $pdf = new FPDF('P', 'mm', array(80, 200));
+        $pdf = new FPDF('P', 'mm', array(83, 200));
         $pdf->AddPage();
+        $pdf->SetMargins(5, 0, 0);
         $pdf->SetTitle("Reporte de Compra");
         $pdf->SetFont('Arial', 'B', 14);
         $pdf->Cell(65, 10, $empresa["nombre"], 0, 1, 'C');
@@ -144,6 +150,47 @@ class Compras extends Controller
         $pdf->Cell(18, 5, 'Folio:', 0, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(18, 5, $id_compra, 0, 1, 'L');
+        $pdf->ln();
+        //Encabezado de productos
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->setTextColor(255, 255, 255);
+        $pdf->Cell(10, 5, 'Cant', 0, 0, 'L', true);
+        $pdf->Cell(33, 5,  utf8_decode('Descripcion'), 0, 0, 'L', true);
+        $pdf->Cell(15, 5, 'Precio', 0, 0, 'L', true);
+        $pdf->Cell(19, 5, 'Sub Total', 0, 1, 'L', true);
+        $pdf->setTextColor(0, 0, 0);
+        foreach ($productos as $row) {
+            $total = $total + $row["sub_total"];
+            $pdf->Cell(10, 5, $row["cantidad"], 0, 0, 'L');
+            $pdf->Cell(33, 5, utf8_decode($row["descripcion"]), 0, 0, 'L');
+            $pdf->Cell(15, 5, $row["precio"], 0, 0, 'L');
+            $pdf->Cell(19, 5, number_format($row["sub_total"], 2, ',', '.'), 0, 1, 'L');
+        }
+        $pdf->ln();
+        $pdf->Cell(76, 5, 'Total a Pagar', 0, 1, 'R');
+        $pdf->Cell(76, 5, number_format($total, 2, ',', '.'), 0, 1, 'R');
+
+
         $pdf->Output();
+    }
+
+    public function historial()
+    {
+
+        $this->views->getView($this, "historial");
+    }
+
+    public function list_historial()
+    {
+
+        $data = $this->model->gethistBuys();
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['acciones'] =
+            '<div>
+                <a class="btn btn-danger" href="'.base_url."Compras/generarPdf/".$data[$i]["id"].'" target="_blank"><i class="fas fa-file-pdf"></i></a>
+            </div>';
+        }
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
     }
 }

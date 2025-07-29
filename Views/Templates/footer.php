@@ -18,9 +18,11 @@
                    <script src="<?php echo base_url; ?>Assets/js/jquery-3.7.1.min.js"></script>
                    <script src="<?php echo base_url; ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
                    <script src="<?php echo base_url; ?>Assets/js/scripts.js"></script>
-                   <script src="<?php echo base_url; ?>Assets/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-                   <link  rel="stylesheet" href="<?php echo base_url; ?>Assets/css/jquery.dataTables.min.css"></link>
-                   <link  rel="stylesheet" href="<?php echo base_url; ?>Assets/css/bootstrap.min.css"></link>
+                   <script src="<?php echo base_url; ?>Assets/DataTables/dataTables.min.js" crossorigin="anonymous"></script>
+                       <script src="<?php echo base_url; ?>Assets/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+
+
+
                    <script src="<?php echo base_url; ?>Assets/js/sweetalert2.all.min.js"></script>
         
 
