@@ -3,7 +3,8 @@
     <li class="breadcrumb-item active">Productos</li>
 </ol>
 <button class="btn btn-primary mb-2" onclick="frmProducts();">Nuevo <i class="fas fa-plus"></i></button>
-<table class="table " id="ta_Productos">
+<div class="table-responsive">
+    <table class="table" id="ta_Productos">
     <thead class="thead-dark">
         <tr>
             <th>Id</th>
@@ -19,6 +20,7 @@
     <tbody>
     </tbody>
 </table>
+</div>
 <div id="new_product" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

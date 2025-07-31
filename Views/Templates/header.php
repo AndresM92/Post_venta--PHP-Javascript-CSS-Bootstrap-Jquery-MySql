@@ -11,7 +11,11 @@
     <link href="<?php echo base_url; ?>Assets/css/style.min.css" rel="stylesheet" />
     <link href="<?php echo base_url; ?>Assets/css/styles.css" rel="stylesheet" />
     <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
-    <link  rel="stylesheet" href="<?php echo base_url; ?>Assets/DataTables/dataTables.min.css"></link>
+    <link href="<?php echo base_url; ?>Assets/css/select2.min.css" rel="stylesheet"/>
+    <link  rel="stylesheet" href="<?php echo base_url; ?>Assets/DataTables/datatables.min.css"></link>
+
+
+
     
 </head>
 
@@ -86,6 +90,19 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="<?php echo base_url; ?>Compras"><i class="fas fa-shopping-cart mr-2 text-primary"></i>Nueva Compra</a>
                                 <a class="nav-link" href="<?php echo base_url; ?>Compras/historial"><i class="fas fa-list mr-2 text-primary"></i>Historial Compras</a>
+                            </nav>
+                        </div>
+
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseVenta" aria-expanded="false" aria-controls="collapseVenta">
+                            <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart fa-2x"></i></div>
+                            Salidas
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
+                        </a>
+
+                        <div class="collapse" id="collapseVenta" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<?php echo base_url; ?>Compras/ventas"><i class="fas fa-shopping-cart mr-2 text-primary"></i>Nueva Venta</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Compras/historial_ventas"><i class="fas fa-list mr-2 text-primary"></i>Historial Ventas</a>
                             </nav>
                         </div>
 
