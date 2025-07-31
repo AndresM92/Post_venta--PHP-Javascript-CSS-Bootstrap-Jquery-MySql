@@ -1679,7 +1679,7 @@ pre code {
 .table th,
 .table td {
   padding: 0.75rem;
-  vertical-align: top;
+  vertical-align: middle;
   border-top: 1px solid #dee2e6;
 }
 
@@ -10389,7 +10389,7 @@ table.dataTable thead > tr > td:active {
 table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before, table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
 table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
 table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
-  position: absolute;
+  position:absolute;
   display: block;
   bottom: 50%;
   content: "\25B2";
@@ -10398,7 +10398,7 @@ table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
 table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after, table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
 table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after,
 table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
-  position: absolute;
+  position:absolute;
   display: block;
   top: 50%;
   content: "\25BC";
@@ -11310,5 +11310,6 @@ div.dt-button-background {
     float: none;
   }
 }
+
 
 
