@@ -2,7 +2,7 @@
 
 class UsuariosModel extends Query
 {
-    private $usuario, $nombre, $pass, $id_caja, $id,$estado;
+    private $usuario, $nombre, $pass, $id_caja, $id, $estado;
 
     public function __construct()
     {
@@ -76,7 +76,14 @@ class UsuariosModel extends Query
 
     public function edit_user(int $id)
     {
-        $sql = "SELECT * FROM usuarios WHERE id='$id'";
+        $sql = "SELECT * FROM usuarios WHERE id=$id";
+        $data = $this->select($sql);
+        return $data;
+    }
+
+    public function getPass(string $pass,int $id)
+    {
+        $sql = "SELECT * FROM usuarios WHERE pass='$pass' AND id=$id";
         $data = $this->select($sql);
         return $data;
     }
@@ -96,6 +103,15 @@ class UsuariosModel extends Query
         $this->estado = $estado;
         $sql = "UPDATE usuarios SET estado=? WHERE id=?";
         $datos = array($this->estado, $this->id);
+        $data = $this->save($sql, $datos);
+        return $data;
+    }
+
+    public function modificarPass(string $pass, int $id)
+    {
+        $this->id = $id;
+        $sql = "UPDATE usuarios SET pass=? WHERE id=?";
+        $datos = array($pass, $this->id);
         $data = $this->save($sql, $datos);
         return $data;
     }

@@ -16,6 +16,20 @@ class AdministracionModel extends Query
         return $data;
     }
 
+    public function getData(string $table)
+    {
+        $sql = "SELECT COUNT(*) AS total FROM $table";
+        $data = $this->select($sql);
+        return $data;
+    }
+
+    public function getSales()
+    {
+        $sql = "SELECT COUNT(*) AS total FROM ventas WHERE fecha > CURDATE()";
+        $data = $this->select($sql);
+        return $data;
+    }
+
     public function modificar(string $nombre, string $telefono, string $direccion, string $mensaje, int $id)
     {
         $sql = "UPDATE configuracion SET nombre=?, telefono=?, direccion=?, mensaje=? WHERE id=?";
@@ -27,5 +41,22 @@ class AdministracionModel extends Query
             $res = "error";
         }
         return $res;
+    }
+
+    public function getStockMin()
+    {
+        $sql = "SELECT * FROM productos WHERE cantidad >8 ORDER BY cantidad DESC LIMIT 2";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
+
+    public function getMSales()
+    {
+        $sql = "SELECT d.id_producto,d.cantidad,p.id,p.descripcion, SUM(d.cantidad) AS total 
+        FROM detalle_ventas d
+        INNER JOIN productos p 
+        ON p.id=d.id_producto GROUP BY d.id_producto, d.cantidad ORDER BY d.cantidad DESC LIMIT 2";
+        $data = $this->selectAll($sql);
+        return $data;
     }
 }

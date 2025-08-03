@@ -53,9 +53,6 @@ class ComprasModel extends Query
         return $res;
     }
 
-
-
-
     public function getDetails(string $table, int $id)
     {
 
@@ -152,11 +149,11 @@ class ComprasModel extends Query
         return $res;
     }
 
-    public function register_details_sale(int $id_venta, int $id_producto, int $cantidad, string $precio, string $sub_total)
+    public function register_details_sale(int $id_venta, int $id_producto, int $cantidad, string $desc, string $precio, string $sub_total)
     {
 
-        $sql = "INSERT INTO detalle_ventas (id_venta,id_producto,cantidad,precio,sub_total) VALUES(?,?,?,?,?)";
-        $datos = array($id_venta, $id_producto, $cantidad, $precio, $sub_total);
+        $sql = "INSERT INTO detalle_ventas (id_venta,id_producto,cantidad,descuento,precio,sub_total) VALUES(?,?,?,?,?,?)";
+        $datos = array($id_venta, $id_producto, $cantidad, $desc, $precio, $sub_total);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
@@ -221,6 +218,15 @@ class ComprasModel extends Query
         return $data;
     }
 
+    public function gethistSales()
+    {
+        $sql = "SELECT c.id,c.nombre,v.* FROM clientes c
+        INNER JOIN ventas v 
+        ON v.id_cliente=c.id";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
+
     public function customers_Sale(int $id)
     {
         $sql = "SELECT v.id, v.id_cliente, c.* FROM ventas v
@@ -236,5 +242,57 @@ class ComprasModel extends Query
         $datos = array($cantidad, $id_producto);
         $data = $this->save($sql, $datos);
         return $data;
+    }
+
+    public function checkDesc(int $id)
+    {
+        $sql = "SELECT * FROM detalle_venta_temp WHERE id= $id";
+        $data = $this->select($sql);
+        return $data;
+    }
+
+    public function getDescuento(int $id_venta)
+    {
+        $sql = "SELECT SUM(descuento) AS total FROM detalle_ventas WHERE id_venta=$id_venta";
+        $data = $this->select($sql);
+        return $data;
+    }
+
+    public function updateDesc(int $desc, string $sub_total, int $id)
+    {
+
+        $sql = "UPDATE detalle_venta_temp SET descuento=?, sub_total=? WHERE id=?";
+        $datos = array($desc, $sub_total, $id);
+        $data = $this->save($sql, $datos);
+        if ($data == 1) {
+            $res = "ok";
+        } else {
+            $res = "error";
+        }
+        return $res;
+    }
+
+    public function getAnularBuy(int $id_compra)
+    {
+        $sql = "SELECT c.*,d.* 
+        FROM compras c
+        INNER JOIN detalle_compras d 
+        ON c.id=d.id_compra WHERE c.id=$id_compra";
+
+        $data = $this->select($sql);
+        return $data;
+    }
+
+    public function getAnular(int $id_compra){
+
+        $sql = "UPDATE compras SET estado=?  WHERE id=?";
+        $datos = array(0,$id_compra);
+        $data = $this->save($sql, $datos);
+        if ($data == 1) {
+            $res = "ok";
+        } else {
+            $res = "error";
+        }
+        return $res;
     }
 }
