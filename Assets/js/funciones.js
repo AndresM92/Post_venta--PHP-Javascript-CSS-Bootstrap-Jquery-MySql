@@ -1,6 +1,6 @@
 //////////////////////////////////////Usuarios///////////////////////////////////////////
 
-let t_Usuarios, t_Clientes, t_Categorias, t_Cajas, t_Medidas, t_Productos, t_historial_c;
+let t_Usuarios, t_Clientes, t_Categorias, t_Cajas, t_Medidas, t_Productos, t_historial_c, t_historial_s, myModal;
 
 function frmLogin(e) {
     /*window.location="http://localhost/pos_venta/Usuarios";*/
@@ -26,7 +26,7 @@ function frmLogin(e) {
                 const res = JSON.parse(this.responseText);
                 if (res.msg == "Iniciando sesion") {
 
-                    window.location.href = base_url + "Usuarios";
+                    window.location.href = base_url + "Administracion/home";
                 } else {
                     document.getElementById("alerta").classList.remove("d-none");
                     document.getElementById("alerta").innerHTML = res;
@@ -37,173 +37,247 @@ function frmLogin(e) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    if (document.getElementById('my_modal')) {
+        myModal = new bootstrap.Modal(document.getElementById('my_modal'))
+    }
+
     $('#cliente_Search').select2();
+
+    $(document).ready(function () {
+        t_Clientes = $('#ta_Clientes').DataTable({
+            ajax: {
+                url: base_url + "Clientes/listar",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'cc' },
+                { data: 'nombre' },
+                { data: 'telefono' },
+                { data: 'direccion' },
+                { data: 'estado' },
+                { data: 'acciones' }
+            ]
+
+        });
+    });
+
+    $(document).ready(function () {
+        //let t_Usuarios;
+        t_Usuarios = $('#ta_Usuarios').DataTable({
+            ajax: {
+                url: base_url + "Usuarios/listar",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'usuario' },
+                { data: 'nombre' },
+                { data: 'caja' },
+                { data: 'estado' },
+                { data: 'acciones' }
+            ]
+
+        });
+    });
+
+    $(document).ready(function () {
+        t_Categorias = $('#ta_Categorias').DataTable({
+            ajax: {
+                url: base_url + "Categorias/listar",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'nombre' },
+                { data: 'estado' },
+                { data: 'acciones' }
+            ]
+
+        });
+    });
+
+    $(document).ready(function () {
+        t_Cajas = $('#ta_Cajas').DataTable({
+            responsive: true,
+            ajax: {
+                url: base_url + "Cajas/listar",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'caja' },
+                { data: 'estado' },
+                { data: 'acciones' }
+            ]
+
+        });
+    });
+
+    $(document).ready(function () {
+        t_Medidas = $('#ta_Medidas').DataTable({
+            ajax: {
+                url: base_url + "Medidas/listar",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'nombre' },
+                { data: 'nombre_corto' },
+                { data: 'estado' },
+                { data: 'acciones' }
+            ]
+
+        });
+    });
+
+    $(document).ready(function () {
+        t_historial_c = $('#t_historial_buy').DataTable({
+            ajax: {
+                url: base_url + "Compras/list_historial",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'total' },
+                { data: 'fecha' },
+                { data: 'estado' },
+                { data: 'acciones' }
+            ]
+
+        });
+    });
+
+    $(document).ready(function () {
+        t_historial_s = $('#t_historial_sale').DataTable({
+            ajax: {
+                url: base_url + "Compras/list_historial_venta",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'nombre' },
+                { data: 'total' },
+                { data: 'fecha' },
+                { data: 'acciones' }
+            ]
+
+        });
+    });
+
+    $(document).ready(function () {
+        t_Productos = $('#ta_Productos').DataTable({
+            responsive: true,
+            ajax: {
+                url: base_url + "Productos/listar",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'imagen' },
+                { data: 'codigo' },
+                { data: 'descripcion' },
+                { data: 'precio_venta' },
+                { data: 'cantidad' },
+                { data: 'estado' },
+                { data: 'acciones' }
+            ],
+            dom: '<"row"<"col-sm-2"l><"col-sm-8 text-center"B><"col-sm-2"f>>' +
+                '<"row"<"col-sm-12"tr>>' +
+                '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+
+            layout: {
+                topStart: {
+                    buttons: [
+                        {
+                            extend: 'copyHtml5',
+                            text: '<i class="fas fa-copy"></i>',
+                            className: 'btn btn-primary'
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            footer: true,
+                            title: 'Archivo',
+                            filename: 'Export_File',
+                            text: '<span class="badge bg-success"><i class="fas fa-file-excel"></i></span>'
+                        },
+                        {
+                            extend: 'pdf',
+                            text: '<i class="fas fa-file-pdf"></i>',
+                            className: 'btn btn-danger'
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="fas fa-print"></i> Imprimir'
+                        }
+                    ]
+                }
+            }
+        });
+    });
+
 })
 
-$(document).ready(function () {
-    t_Clientes = $('#ta_Clientes').DataTable({
-        ajax: {
-            url: base_url + "Clientes/listar",
-            dataSrc: "",
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'cc' },
-            { data: 'nombre' },
-            { data: 'telefono' },
-            { data: 'direccion' },
-            { data: 'estado' },
-            { data: 'acciones' }
-        ]
+function frmChange_Pass(e) {
+    e.preventDefault();
+    const actual = document.getElementById("clave_actual").value;
+    const nueva_clave = document.getElementById("clave_nueva").value;
+    const confirmar_clave = document.getElementById("confirmar_clave").value;
+    if (actual == "" || nueva_clave == "" || confirmar_clave == "") {
+        Swal.fire({
+            icon: "warning",
+            title: "Todos los campos son obligatorios",
+            timer: 3000
+        });
+    }
+    else if (nueva_clave.value != confirmar_clave.value) {
+        Swal.fire({
+            icon: "warning",
+            title: "Las contraseñas no coinciden",
+            timer: 3000
+        });
+    } else {
 
-    });
-});
+        const url = base_url + "Usuarios/cambiarPass";
+        const frm = document.getElementById("frmChangePass");
+        const http = new XMLHttpRequest();
+        http.open("POST", url, true);
+        http.send(new FormData(frm));
 
-$(document).ready(function () {
-    //let t_Usuarios;
-    t_Usuarios = $('#ta_Usuarios').DataTable({
-        ajax: {
-            url: base_url + "Usuarios/listar",
-            dataSrc: "",
-            /*error: function(xhr, error, thrown) {
-                console.error("Error en DataTables:", error);
-                console.log("Respuesta del servidor:", xhr.responseText);
-            }*/
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'usuario' },
-            { data: 'nombre' },
-            { data: 'caja' },
-            { data: 'estado' },
-            { data: 'acciones' }
-        ]
-
-    });
-});
-
-$(document).ready(function () {
-    t_Categorias = $('#ta_Categorias').DataTable({
-        ajax: {
-            url: base_url + "Categorias/listar",
-            dataSrc: "",
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'nombre' },
-            { data: 'estado' },
-            { data: 'acciones' }
-        ]
-
-    });
-});
-
-$(document).ready(function () {
-    t_Cajas = $('#ta_Cajas').DataTable({
-        ajax: {
-            url: base_url + "Cajas/listar",
-            dataSrc: "",
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'caja' },
-            { data: 'estado' },
-            { data: 'acciones' }
-        ]
-
-    });
-});
-
-$(document).ready(function () {
-    t_Medidas = $('#ta_Medidas').DataTable({
-        ajax: {
-            url: base_url + "Medidas/listar",
-            dataSrc: "",
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'nombre' },
-            { data: 'nombre_corto' },
-            { data: 'estado' },
-            { data: 'acciones' }
-        ]
-
-    });
-});
-
-$(document).ready(function () {
-    t_historial_c = $('#t_historial_buy').DataTable({
-        ajax: {
-            url: base_url + "Compras/list_historial",
-            dataSrc: "",
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'total' },
-            { data: 'fecha' },
-            { data: 'acciones' }
-        ]
-
-    });
-});
-
-$(document).ready(function () {
-    t_Productos = $('#ta_Productos').DataTable({
-        ajax: {
-            url: base_url + "Productos/listar",
-            dataSrc: "",
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'imagen' },
-            { data: 'codigo' },
-            { data: 'descripcion' },
-            { data: 'precio_venta' },
-            { data: 'cantidad' },
-            { data: 'estado' },
-            { data: 'acciones' }
-        ],
-        dom: '<"row"<"col-sm-2"l><"col-sm-8 text-center"B><"col-sm-2"f>>' +
-            '<"row"<"col-sm-12"tr>>' +
-            '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-
-        layout: {
-            topStart: {
-                buttons: [
-                    {
-                        extend: 'copyHtml5',
-                        text: '<i class="fas fa-copy"></i>',
-                        className: 'btn btn-primary'
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        footer: true,
-                        title: 'Archivo',
-                        filename: 'Export_File',
-                        text: '<span class="badge badge-success"><i class="fas fa-file-excel"></i></span>'
-                    },
-                    {
-                        extend: 'pdf',
-                        text: '<i class="fas fa-file-pdf"></i>',
-                        className: 'btn btn-danger'
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fas fa-print"></i> Imprimir'
-                    }
-                ]
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const response = JSON.parse(this.responseText);
+                if (response.msg == "Contraseña modificada con exito") {
+                    Swal.fire({
+                        title: response.msg,
+                        icon: "success",
+                        draggable: true,
+                        timer: 3000
+                    });
+                    $("#changePass").modal("hide");
+                    frm.reset();
+                } else {
+                    Swal.fire({
+                        title: response.msg,
+                        icon: response.icono,
+                        draggable: true,
+                        timer: 3000
+                    });
+                }
             }
-        }
-    });
-});
+        };
+    }
+}
 
 function frmUsers() {
-    document.getElementById("title").innerHTML = "Nuevo Usuario";
-    document.getElementById("btnAction").innerHTML = "Registrar";
+    document.getElementById("title").textContent = "Nuevo Usuario";
+    document.getElementById("btnAction").textContent = "Registrar";
     document.getElementById("passwords").classList.remove("d-none");
     document.getElementById("frmUsuario").reset();
+    myModal.show();
     document.getElementById("id").value = "";
-    $("#new_user").modal("show");
+    //$("#new_user").modal("show");
 }
 
 function register_user(e) {
@@ -265,15 +339,7 @@ function register_user(e) {
                             t_Usuarios.ajax.reload(null, true);
 
 
-                        }/* else if (response.msg == "Todos los campos son obligatorios") {
-                            Swal.fire({
-                                title: response.msg,
-                                icon: "info",
-                                draggable: true,
-                                timer: 3000
-                            });
-                            $("#new_user").modal("hide");
-                        }*/
+                        }
                         else {
                             Swal.fire({
                                 icon: 'error',
@@ -981,11 +1047,12 @@ function btn_delete_Box(id) {
 //////////////////////////////////////Medidas////////////////////////////////////////////
 
 function frmMeasures() {
-    document.getElementById("title").innerHTML = "Nueva Medida";
-    document.getElementById("btnAction").innerHTML = "Registrar";
+    document.getElementById("title").textContent = "Nueva Medida";
+    document.getElementById("btnAction").textContent = "Registrar";
     document.getElementById("frmMeasuress").reset();
     document.getElementById("id").value = "";
-    $("#new_measure").modal("show");
+    myModal.show();
+    //$("#new_measure").modal("show");
 
 }
 
@@ -1022,7 +1089,7 @@ function register_Measure(e) {
                                 timer: 3000
                             });
                             frm.reset();
-                            $("#new_measure").modal("hide");
+                            myModal.hide();
                             t_Medidas.ajax.reload();
 
                         } else if (response.msg == "Medida modificada con éxito") {
@@ -1032,7 +1099,7 @@ function register_Measure(e) {
                                 draggable: true,
                                 timer: 3000
                             });
-                            $("#new_measure").modal("hide");
+                            myModal.hide();
                             t_Medidas.ajax.reload(null, true);
                         }
                         else {
@@ -1065,8 +1132,8 @@ function register_Measure(e) {
 
 function btn_edit_Measure(id) {
 
-    document.getElementById("title").innerHTML = "Actualizar Medida";
-    document.getElementById("btnAction").innerHTML = "Modificar";
+    document.getElementById("title").textContent = "Actualizar Medida";
+    document.getElementById("btnAction").textContent = "Modificar";
     const url = base_url + "Medidas/editar/" + id;
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
@@ -1078,7 +1145,7 @@ function btn_edit_Measure(id) {
             document.getElementById("id").value = res.id;
             document.getElementById("nombre").value = res.nombre;
             document.getElementById("nombre_corto").value = res.nombre_corto;
-            $("#new_measure").modal("show");
+            myModal.show();
         }
     };
 }
@@ -1577,6 +1644,8 @@ function upload_Detalis_Sale() {
                 <td>${row["id"]}</td>
                 <td>${row["descripcion"]}</td>
                 <td>${row["cantidad"]}</td>
+                <td><input class="form-control" placeholder="Desc" type="text" onkeyup="calDescuento(event,${row["id"]})"></td>
+                <td>${row["descuento"]}</td>
                 <td>${row["precio"]}</td>
                 <td>${row["sub_total"]}</td>
                 <td>
@@ -1588,6 +1657,36 @@ function upload_Detalis_Sale() {
             });
             document.getElementById("tblDetails_Sale").innerHTML = html;
             document.getElementById("total").value = res.total_pagar.total;
+        }
+    }
+}
+
+function calDescuento(e, id) {
+    e.preventDefault();
+    if (e.target.value == "") {
+
+        Swal.fire({
+            title: "Ingrese el Descuento",
+            icon: "warning",
+            draggable: true,
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else {
+        if (e.which == 13) {
+            const url = base_url + "Compras/calDescuento/" + id + "/" + e.target.value;
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    upload_Detalis_Sale();
+                    //const response = JSON.parse(this.responseText);
+
+                }
+            }
+
         }
     }
 }
@@ -1763,6 +1862,115 @@ function search_Codigo_Sale(e) {
     }
 
 }
+
+if (document.getElementById("stockMin")) {
+    ReportStock();
+    ReportMSales();
+}
+
+function ReportStock() {
+
+    const url = base_url + "Administracion/reportStock";
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            let nombre = [];
+            let cantidad = [];
+
+            for (let i = 0; i < response.length; i++) {
+                nombre.push(response[i]["descripcion"]);
+                cantidad.push(response[i]["cantidad"]);
+            }
+            var ctx = document.getElementById("stockMin");
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: nombre,
+                    datasets: [{
+                        data: cantidad,
+                        backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
+                    }],
+                },
+            });
+
+        }
+    }
+
+
+}
+
+function ReportMSales() {
+
+    const url = base_url + "Administracion/reportProVentas";
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            let nombre = [];
+            let cantidad = [];
+
+            for (let i = 0; i < response.length; i++) {
+                nombre.push(response[i]["descripcion"]);
+                cantidad.push(response[i]["total"]);
+            }
+            var ctx = document.getElementById("stockVen");
+            var myPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: nombre,
+                    datasets: [{
+                        data: cantidad,
+                        backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
+                    }],
+                },
+            });
+
+        }
+    }
+
+
+}
+
+function btnAnularC(id) {
+
+    Swal.fire({
+        title: "Estas seguro de anular la compra?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Compras/anularCompra/" + id;
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.send();
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    Swal.fire(
+                        response.msg,
+                        '',
+                        response.icono
+                    )
+                }
+                t_historial_c.ajax.reload();
+            }
+        }
+    })
+}
+
+
+
 
 
 
