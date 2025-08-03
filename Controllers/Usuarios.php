@@ -148,6 +148,40 @@ class Usuarios extends Controller
         die();
     }
 
+    public function cambiarPass()
+    {
+
+        $actual = $_POST["clave_actual"];
+        $nueva = $_POST["clave_nueva"];
+        $confirmar = $_POST["confirmar_clave"];
+
+        if (empty($actual) || empty($nueva) || empty($confirmar)) {
+            $msg = array('msg' => 'Todos los campos son obligatorios', 'icono' => 'warning');
+        } else {
+            if ($nueva != $confirmar) {
+                $msg = array('msg' => 'Las contraseñas no coinciden', 'icono' => 'warning');
+            } else {
+                $id = $_SESSION["id_usuario"];
+                $hash = hash("SHA256", $actual);
+                $data = $this->model->getPass($hash,$id);
+
+                if (!empty($data)) {
+                    
+                    $check = $this->model->modificarPass(hash("SHA256", $nueva), $id);
+                    if ($check == 1) {
+                        $msg = array('msg' => 'Contraseña modificada con exito', 'icono' => 'success');
+                    } else {
+                        $msg = array('msg' => 'Error al modificar la contraseña', 'icono' => 'error');
+                    }
+                } else {
+                    $msg = array('msg' => 'Error al modificar la contraseña', 'icono' => 'error');
+                }
+            }
+        }
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
     public function salir()
     {
         session_destroy();

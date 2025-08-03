@@ -19,6 +19,15 @@ class Administracion extends Controller
         $this->views->getView($this, "index", $data);
     }
 
+    public function home()
+    {
+        $data["usuarios"] = $this->model->getData("usuarios");
+        $data["clientes"] = $this->model->getData("clientes");
+        $data["productos"] = $this->model->getData("productos");
+        $data["ventas"] = $this->model->getSales("ventas");
+        $this->views->getView($this, "home", $data);
+    }
+
     public function modificar()
     {
 
@@ -35,6 +44,21 @@ class Administracion extends Controller
             $msg = array('msg' => 'Error al modificar los datos de la empresa', 'icono' => 'error');
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function reportStock()
+    {
+
+        $data = $this->model->getStockMin();
+        echo json_encode($data);
+        die();
+    }
+
+    public function reportProVentas()
+    {
+        $data = $this->model->getMSales();
+        echo json_encode($data);
         die();
     }
 }

@@ -21,6 +21,11 @@ class Compras extends Controller
         $this->views->getView($this, "ventas", $data);
     }
 
+    public function historial_ventas()
+    {
+        $this->views->getView($this, "historial_ventas");
+    }
+
     public function buscarCodigo($cod)
     {
 
@@ -149,7 +154,7 @@ class Compras extends Controller
         $data = $this->model->r_buy($total["total"]);
         if ($data == "ok") {
 
-            $id_compra = $this->model->getId('detalle');
+            $id_compra = $this->model->getId('compras');
             $details = $this->model->getDetails('detalle', $id_usuario);
             foreach ($details as $row) {
                 $cantidad = $row["cantidad"];
@@ -184,10 +189,11 @@ class Compras extends Controller
             $details = $this->model->getDetails('detalle_venta_temp', $id_usuario);
             foreach ($details as $row) {
                 $cantidad = $row["cantidad"];
+                $desc = $row["descuento"];
                 $precio = $row["precio"];
                 $id_producto = $row["id_producto"];
-                $sub_total = $cantidad * $precio;
-                $this->model->register_details_sale($id_venta["id"], $id_producto, $cantidad, $precio, $sub_total);
+                $sub_total = ($cantidad * $precio) - $desc;
+                $this->model->register_details_sale($id_venta["id"], $id_producto, $cantidad, $desc, $precio, $sub_total);
                 $stock_actual = $this->model->getPro($id_producto);
                 $stock = $stock_actual["cantidad"] - $cantidad;
                 $this->model->updateStock($stock, $id_producto);
@@ -243,6 +249,7 @@ class Compras extends Controller
         //Encabezado de productos
         $pdf->SetFillColor(0, 0, 0);
         $pdf->setTextColor(255, 255, 255);
+        $pdf->SetFont('Arial', 'B', 7);
         $pdf->Cell(10, 5, 'Cant', 0, 0, 'L', true);
         $pdf->Cell(33, 5,  utf8_decode('Descripcion'), 0, 0, 'L', true);
         $pdf->Cell(15, 5, 'Precio', 0, 0, 'L', true);
@@ -268,6 +275,7 @@ class Compras extends Controller
 
         $empresa = $this->model->getEmpresa();
         $productos = $this->model->getProSale($id_venta);
+        $descuento = $this->model->getDescuento($id_venta);
         $clientes = $this->model->customers_Sale($id_venta);
         $total = 0;
 
@@ -303,6 +311,7 @@ class Compras extends Controller
         //Encabezado de clientes
         $pdf->SetFillColor(0, 0, 0);
         $pdf->setTextColor(255, 255, 255);
+        $pdf->SetFont('Arial', 'B', 7);
         $pdf->Cell(25, 5, 'Nombre', 0, 0, 'L', true);
         $pdf->Cell(25, 5,  utf8_decode('Teléfono'), 0, 0, 'L', true);
         $pdf->Cell(25, 5, utf8_decode('Dirección'), 0, 1, 'L', true);
@@ -327,6 +336,8 @@ class Compras extends Controller
             $pdf->Cell(19, 5, number_format($row["sub_total"], 2, ',', '.'), 0, 1, 'L');
         }
         $pdf->ln();
+        $pdf->Cell(76, 5, 'Descuento Total', 0, 1, 'R');
+        $pdf->Cell(76, 5, number_format($descuento["total"], 2, ',', '.'), 0, 1, 'R');
         $pdf->Cell(76, 5, 'Total a Pagar', 0, 1, 'R');
         $pdf->Cell(76, 5, number_format($total, 2, ',', '.'), 0, 1, 'R');
 
@@ -345,12 +356,85 @@ class Compras extends Controller
 
         $data = $this->model->gethistBuys();
         for ($i = 0; $i < count($data); $i++) {
+            if ($data[$i]['estado'] == 1) {
+                $data[$i]['estado'] = '<span class="badge bg-success">Completado</span>';
+                $data[$i]['acciones'] =
+                    '<div>
+                <button class="btn btn-warning" onclick="btnAnularC(' . $data[$i]['id'] . ')"><i class="fas fa-ban"></i></button>
+                <a class="btn btn-danger" href="' . base_url . "Compras/generarPdf/" . $data[$i]["id"] . '" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                    </div>';
+            } else {
+                $data[$i]['estado'] = '<span class="badge bg-danger">Anulado</span>';
+                $data[$i]['acciones'] =
+                    '<div>
+                <a class="btn btn-danger" href="' . base_url . "Compras/generarPdf/" . $data[$i]["id"] . '" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                    </div>';
+            }
+        }
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function list_historial_venta()
+    {
+
+        $data = $this->model->gethistSales();
+        for ($i = 0; $i < count($data); $i++) {
             $data[$i]['acciones'] =
                 '<div>
-                <a class="btn btn-danger" href="' . base_url . "Compras/generarPdf/" . $data[$i]["id"] . '" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                <a class="btn btn-danger" href="' . base_url . "Compras/generarPdfVenta/" . $data[$i]["id"] . '" target="_blank"><i class="fas fa-file-pdf"></i></a>
             </div>';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function calDescuento($data)
+    {
+
+        $array = explode(",", $data);
+        $id = $array[0];
+        $desc = $array[1];
+
+        if (empty($id) || empty($desc)) {
+
+            $msg = array('msg' => 'error', 'icono' => 'error');
+        } else {
+
+            $check_Desc_Actual = $this->model->checkDesc($id);
+            $desc_Total = $check_Desc_Actual["descuento"] + $desc;
+            $sub_total = ($check_Desc_Actual["cantidad"] * $check_Desc_Actual["precio"]) - $desc_Total;
+            $data2 = $this->model->updateDesc($desc_Total, $sub_total, $id);
+
+            if ($data2 == 'ok') {
+                $msg = array('msg' => 'Descuento aplicado', 'icono' => 'success');
+            } else {
+                $msg = array('msg' => 'Error al aplicar el Descuento', 'icono' => 'error');
+            }
+        }
+
+        echo json_encode($msg);
+        die();
+    }
+
+    public function anularCompra($id_compra)
+    {
+
+        $data = $this->model->getAnularBuy($id_compra);
+        $anular = $this->model->getAnular($id_compra);
+
+        foreach ($data as $row) {
+            $stock_actual = $this->model->getPro($row["id_producto"]);
+            $stock = $stock_actual["cantidad"] - $row["cantidad"];
+            $this->model->updateStock($stock, $row["id_producto"]);
+        }
+
+        if ($anular == 'ok') {
+            $msg = array('msg' => 'La compra fue anulada', 'icono' => 'success');
+        } else {
+            $msg = array('msg' => 'Error al anular', 'icono' => 'error');
+        }
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
     }
 }
