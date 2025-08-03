@@ -9,11 +9,7 @@
     <meta name="author" content="" />
     <title>Iniciar Sesion</title>
     <link href="<?php echo base_url; ?>Assets/css/styles.css" rel="stylesheet" />
-    <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
-    <script src="<?php echo base_url; ?>Assets/js/jquery-3.7.1.min.js"></script>
-    <script src="<?php echo base_url; ?>Assets/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 
-    <script src="<?php echo base_url; ?>Assets/js/sweetalert2.all.min.js"></script>
 </head>
 
 <body class="bg-primary">
@@ -64,12 +60,17 @@
             </footer>
         </div>
     </div>
+    <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
     <script src="<?php echo base_url; ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="<?php echo base_url; ?>Assets/js/scripts.js"></script>
+    <script src="<?php echo base_url; ?>Assets/js/jquery-3.7.1.min.js"></script>
+    <script src="<?php echo base_url; ?>Assets/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="<?php echo base_url; ?>Assets/js/sweetalert2.all.min.js"></script>
     <script src="<?php echo base_url; ?>Assets/js/funciones.js"></script>
     <script>
         const base_url = "<?php echo base_url; ?>";
     </script>
-    <script src="<?php echo base_url; ?>Assets/js/scripts.js"></script>
+    
 </body>
 
 </html>

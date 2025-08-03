@@ -43,8 +43,8 @@
         </form>
     </div>
 </div>
-<table class="table table-light table-bordered table-hover">
-    <thead class="thead-dark">
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
         <tr>
             <th>Id</th>
             <th>Descripcion</th>
@@ -58,11 +58,11 @@
     </tbody>
 </table>
 <div class="row">
-    <div class="col-md-4 ml-auto">
+    <div class="col-md-4 ms-auto">
         <div class="form-group">
-            <label for="total" class="font-weight-bold">Total</label>
+            <label for="total" class="fw-bold">Total</label>
             <input id="total" class="form-control" type="text" name="total" placeholder="Total" disabled>
-            <button class="btn btn-primary mt-2 btn-block" type="button" onclick="generate_Purchase_Sale(1)">Generar Compra</button>
+            <button class="btn btn-primary mt-2 w-100" type="button" onclick="generate_Purchase_Sale(1)">Generar Compra</button>
         </div>
     </div>
 </div>

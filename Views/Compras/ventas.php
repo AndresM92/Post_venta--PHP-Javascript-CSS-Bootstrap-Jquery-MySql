@@ -43,12 +43,14 @@
         </form>
     </div>
 </div>
-<table class="table table-light table-bordered table-hover">
+<table class="table table-dark table-bordered table-hover">
     <thead class="thead-dark">
         <tr>
             <th>Id</th>
             <th>Descripcion</th>
             <th>Cantidad</th>
+            <th>Aplicar</th>
+            <th>Descuento</th>
             <th>Precio</th>
             <th>Subtotal</th>
             <th></th>
@@ -59,7 +61,7 @@
 </table>
 <div class="row">
     <div class="col-md-4">
-        <div class="form-group">
+        <div>
             <label for="cliente_Search">Seleccionar Cliente</label>
             <select id="cliente_Search" class="form-control" name="cliente_Search">
                 <?php foreach ($data as $row) { ?>
@@ -68,11 +70,11 @@
             </select>
         </div>
     </div>
-    <div class="col-md-3 ml-auto">
-        <div class="form-group">
-            <label for="total" class="font-weight-bold">Total</label>
+    <div class="col-md-3 ms-auto">
+        <div>
+            <label for="total" class="fw-bold">Total</label>
             <input id="total" class="form-control" type="text" name="total" placeholder="Total" disabled>
-            <button class="btn btn-primary mt-2 btn-block" type="button" onclick="generate_Purchase_Sale(2)">Generar venta</button>
+            <button class="btn btn-primary mt-2 w-100" type="button" onclick="generate_Purchase_Sale(2)">Generar venta</button>
         </div>
     </div>
     <?php include "Views/Templates/footer.php"; ?>

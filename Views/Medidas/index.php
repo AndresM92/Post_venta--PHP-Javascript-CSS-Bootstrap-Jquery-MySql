@@ -16,25 +16,23 @@
     <tbody>
     </tbody>
 </table>
-<div id="new_measure" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="my_modal" tabindex="-1" aria-labelledby="my_modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white" id="title">Nueva Medida</h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-header">
+                <h5 class="modal-title" id="title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method="post" id="frmMeasuress" onsubmit="register_Measure(event)">
                     <input type="hidden" id="id" name="id">
-                    <div class="form-group">
-                        <label for="nombre">nombre</label>
+                    <div class="form-floating mb-3">
                         <input id="nombre" class="form-control" type="text" name="nombre" placeholder="Nombre Medida">
+                        <label for="nombre">nombre</label>
                     </div>
-                    <div class="form-group">
-                        <label for="nombre_corto">nombre corto</label>
+                    <div class="form-floating mb-3">
                         <input id="nombre_corto" class="form-control" type="text" name="nombre_corto" placeholder="Unidad">
+                        <label for="nombre_corto">nombre corto</label>
                     </div>
                     <button id="btnAction" class="btn btn-primary" type="submit">Registrar</button>
                     <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancelar</button>
@@ -42,4 +40,5 @@
             </div>
         </div>
     </div>
+</div>
     <?php include "Views/Templates/footer.php"; ?>

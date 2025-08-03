@@ -5,13 +5,13 @@
         Ventas
     </div>
     <div class="card-body">
-        <table class="table table-light" id="t_historial_buy">
+        <table class="table table-light" id="t_historial_sale">
             <thead class="thead-dark">
                 <tr>
                     <th>#</th>
+                    <th>Clientes</th>
                     <th>Total</th>
                     <th>Fecha Compra</th>
-                    <th>Estado</th>
                     <th></th>
                 </tr>
             </thead>

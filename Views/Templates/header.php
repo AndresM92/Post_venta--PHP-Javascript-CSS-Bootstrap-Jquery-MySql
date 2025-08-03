@@ -10,19 +10,15 @@
     <title>Panel Adimn</title>
     <link href="<?php echo base_url; ?>Assets/css/style.min.css" rel="stylesheet" />
     <link href="<?php echo base_url; ?>Assets/css/styles.css" rel="stylesheet" />
+    <link href="<?php echo base_url; ?>Assets/DataTables/datatables.min.css" rel="stylesheet">
     <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
     <link href="<?php echo base_url; ?>Assets/css/select2.min.css" rel="stylesheet"/>
-    <link  rel="stylesheet" href="<?php echo base_url; ?>Assets/DataTables/datatables.min.css"></link>
-
-
-
-    
 </head>
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Pos Venta</a>
+        <a class="navbar-brand ps-3" href="<?php echo base_url; ?>Administracion/home">Pos Venta</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
 
@@ -31,10 +27,8 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Perfil</a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
+                    <li><a class="dropdown-item" href="#!" data-toggle="modal" data-target="#changePass">Perfil</a></li>
+                    <li><hr class="dropdown-divider"/></li>
                     <li><a class="dropdown-item" href="<?php echo base_url; ?>Usuarios/salir">Cerrar Sesión</a></li>
                 </ul>
             </li>
@@ -46,7 +40,7 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
 
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-cogs mr-2 fa-2x"></i></div>
                             Administracion
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
