@@ -150,8 +150,10 @@ class Compras extends Controller
     public function registrarCompra()
     {
         $id_usuario = $_SESSION["id_usuario"];
+        $fecha = date('Y-m-d');
+        $hora = date('H:i:s');
         $total = $this->model->calBuy_Sale('detalle', $id_usuario);
-        $data = $this->model->r_buy($total["total"]);
+        $data = $this->model->r_buy($total["total"],$fecha,$hora);
         if ($data == "ok") {
 
             $id_compra = $this->model->getId('compras');
@@ -181,8 +183,10 @@ class Compras extends Controller
     public function registrarVenta($id_cliente)
     {
         $id_usuario = $_SESSION["id_usuario"];
+        $fecha = date('Y-m-d');
+        $hora = date('H:i:s');
         $total = $this->model->calBuy_Sale('detalle_venta_temp', $id_usuario);
-        $data = $this->model->r_sale($id_cliente, $total["total"]);
+        $data = $this->model->r_sale($id_usuario, $id_cliente, $total["total"], $fecha, $hora);
         if ($data == "ok") {
 
             $id_venta = $this->model->getId('ventas');

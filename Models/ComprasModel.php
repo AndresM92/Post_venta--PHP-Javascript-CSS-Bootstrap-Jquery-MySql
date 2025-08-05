@@ -99,11 +99,11 @@ class ComprasModel extends Query
         return $res;
     }
 
-    public function r_buy(string $total)
+    public function r_buy(string $total,string $fecha,string $hora)
     {
 
-        $sql = "INSERT INTO compras (total) VALUES(?)";
-        $datos = array($total);
+        $sql = "INSERT INTO compras (total,fecha,hora) VALUES(?,?,?)";
+        $datos = array($total,$fecha,$hora);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
@@ -113,11 +113,11 @@ class ComprasModel extends Query
         return $res;
     }
 
-    public function r_sale(int $id_cliente, string $total)
+    public function r_sale(int $id_usuario,int $id_cliente, string $total,string $fecha,string $hora)
     {
 
-        $sql = "INSERT INTO ventas (id_cliente,total) VALUES(?,?)";
-        $datos = array($id_cliente, $total);
+        $sql = "INSERT INTO ventas (id_usuario,id_cliente,total,fecha,hora) VALUES(?,?,?,?,?)";
+        $datos = array($id_usuario,$id_cliente, $total,$fecha,$hora);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
