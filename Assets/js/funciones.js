@@ -1,6 +1,7 @@
 //////////////////////////////////////Usuarios///////////////////////////////////////////
 
-let t_Usuarios, t_Clientes, t_Categorias, t_Cajas, t_Medidas, t_Productos, t_historial_c, t_historial_s, myModal;
+let t_Usuarios, t_Clientes, t_Categorias, t_Cajas, t_Medidas, t_Productos,
+    t_historial_c, t_historial_s, myModal, t_Arqueo;
 
 function frmLogin(e) {
     /*window.location="http://localhost/pos_venta/Usuarios";*/
@@ -214,6 +215,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     ]
                 }
             }
+        });
+    });
+
+    $(document).ready(function () {
+        t_Arqueo = $('#ta_Arqueo').DataTable({
+            ajax: {
+                url: base_url + "Cajas/listar_arqueo",
+                dataSrc: "",
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'monto_inicial' },
+                { data: 'monto_final' },
+                { data: 'fecha_apertura' },
+                { data: 'fecha_cierre' },
+                { data: 'total_ventas' },
+                { data: 'monto_total' },
+                { data: 'estado' }
+            ]
+
         });
     });
 
@@ -1969,6 +1990,65 @@ function btnAnularC(id) {
     })
 }
 
+function frmArqueoBox() {
+
+    document.getElementById("ocultar_campos").classList.add("d-none");
+    document.getElementById("monto_inicial").value = "";
+    document.getElementById("btnAction").textContent = "Abrir Caja";
+    document.getElementById("title").textContent = "Arqueo Caja";
+    myModal.show();
+
+}
+
+function Open_Arqueo(e) {
+    e.preventDefault();
+    const monto_inicial = document.getElementById('monto_inicial').value;
+    if (monto_inicial == "") {
+        alert("Ingrese el monto inicial");
+    } else {
+        const frm = document.getElementById("frmOpenBox");
+        const url = base_url + "Cajas/abrirArqueo";
+        const http = new XMLHttpRequest();
+        http.open("POST", url, true);
+        http.send(new FormData(frm));
+
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const response = JSON.parse(this.responseText);
+                alert(response.msg);
+                t_Arqueo.ajax.reload();
+            }
+            myModal.hide();
+        }
+
+    }
+}
+
+function close_box() {
+
+    const url = base_url + "Cajas/getVentas";
+    const http = new XMLHttpRequest();
+    http.open("GET", url, true);
+    http.send();
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            myModal.show();
+            document.getElementById("ocultar_campos").classList.remove("d-none");
+            document.getElementById("btnAction").textContent = "Cerrar Caja";
+            document.getElementById("monto_inicial").value = response.inicial.monto_inicial;
+            document.getElementById("monto_final").value = response.monto_total.total;
+            document.getElementById("total_ventas").value = response.total_ventas.total;
+            document.getElementById("monto_general").value = response.monto_general;
+            document.getElementById("id").value = response.inicial.id;
+            //alert(response.msg);
+
+        }
+
+    }
+
+}
 
 
 
