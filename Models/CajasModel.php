@@ -130,7 +130,7 @@ class CajasModel extends Query
     {
 
         $sql = "UPDATE cierre_caja SET monto_final=?,fecha_cierre=?,total_ventas=?,monto_total=?,estado=? WHERE id=?";
-        $datos = array($m_final, $cierre, $t_ventas, $m_general,0,$id);
+        $datos = array($m_final, $cierre, $t_ventas, $m_general, 0, $id);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
@@ -144,8 +144,14 @@ class CajasModel extends Query
     {
 
         $sql = "UPDATE ventas SET apertura=? WHERE id_usuario=?";
-        $datos = array(0,$id);
+        $datos = array(0, $id);
         $this->save($sql, $datos);
+    }
 
+    public function btnArqueo()
+    {
+        $sql = "SELECT estado FROM cierre_caja WHERE estado=1";
+        $data = $this->select($sql);
+        return $data;
     }
 }

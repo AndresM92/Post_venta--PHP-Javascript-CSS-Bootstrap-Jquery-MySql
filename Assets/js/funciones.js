@@ -302,15 +302,13 @@ function frmUsers() {
 }
 
 function register_user(e) {
-    e.preventDefault(); // Evita el envío tradicional del formulario
+    e.preventDefault();
 
     const usuario = document.getElementById("usuario");
     const nombre = document.getElementById("nombre");
     const pass = document.getElementById("pass");
     const confirmar = document.getElementById("confirmar");
     const caja = document.getElementById("caja");
-
-    // Validaciones
     if (usuario.value == "" || nombre.value == "" || caja.value == "") {
         Swal.fire({
             icon: "error",
@@ -1782,15 +1780,19 @@ function generate_Purchase_Sale(accion) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     let ruta;
-                    if (response.msg == "Se ha generado la Compra") {
+                    if (response.msg == "Se ha generado la Compra" || response.msg == 'La caja esta cerrada') {
                         Swal.fire(
-                            'Compra Generada',
+                            response.msg,
                             '',
-                            "success"
+                            response.icono
                         )
-                        ruta = base_url + 'Compras/generarPdf/' + response.id_compra;
-                        window.open(ruta);
-                        setTimeout(() => { window.location.reload(); }, 300);
+
+                        if (response.icono != 'info') {
+                            ruta = base_url + 'Compras/generarPdf/' + response.id_compra;
+                            window.open(ruta);
+                            setTimeout(() => { window.location.reload(); }, 300);
+                        }
+
                     } else {
                         Swal.fire(
                             response.msg,
@@ -1990,6 +1992,7 @@ function btnAnularC(id) {
     })
 }
 
+/////////////////////////////////////////Arqueo Caja//////////////////////////////////////////
 function frmArqueoBox() {
 
     document.getElementById("ocultar_campos").classList.add("d-none");
@@ -2016,9 +2019,26 @@ function Open_Arqueo(e) {
             if (this.readyState == 4 && this.status == 200) {
                 const response = JSON.parse(this.responseText);
                 alert(response.msg);
+
+                if (response.msg == 'Caja abierta con éxito') {
+
+                    document.getElementById('btn_open_arqueo').classList.add('d-none');
+                    document.getElementById('btn_close_arqueo').classList.remove('d-none');
+
+                }
+                if (response.msg = 'Caja Cerrada con exito') {
+
+                    document.getElementById('btn_close_arqueo').classList.add('d-none');
+                    document.getElementById('btn_open_arqueo').classList.remove('d-none');
+
+                    window.location.reload(true);
+                }
                 t_Arqueo.ajax.reload();
+
             }
             myModal.hide();
+
+
         }
 
     }
@@ -2042,6 +2062,7 @@ function close_box() {
             document.getElementById("total_ventas").value = response.total_ventas.total;
             document.getElementById("monto_general").value = response.monto_general;
             document.getElementById("id").value = response.inicial.id;
+            //document.getElementById('frmOpenBox').reset();
             //alert(response.msg);
 
         }

@@ -119,6 +119,44 @@ class Compras extends Controller
         die();
     }
 
+    public function registrarVenta($id_cliente)
+    {
+        $id_usuario = $_SESSION["id_usuario"];
+        $check = $this->model->checkBox($id_usuario);
+        if (empty($check)) {
+            $msg = array('msg' => 'La caja esta cerrada', 'icono' => 'info');
+        } else {
+            $fecha = date('Y-m-d');
+            $hora = date('H:i:s');
+            $total = $this->model->calBuy_Sale('detalle_venta_temp', $id_usuario);
+            $data = $this->model->r_sale($id_usuario, $id_cliente, $total["total"], $fecha, $hora);
+            if ($data == "ok") {
+
+                $id_venta = $this->model->getId('ventas');
+                $details = $this->model->getDetails('detalle_venta_temp', $id_usuario);
+                foreach ($details as $row) {
+                    $cantidad = $row["cantidad"];
+                    $desc = $row["descuento"];
+                    $precio = $row["precio"];
+                    $id_producto = $row["id_producto"];
+                    $sub_total = ($cantidad * $precio) - $desc;
+                    $this->model->register_details_sale($id_venta["id"], $id_producto, $cantidad, $desc, $precio, $sub_total);
+                    $stock_actual = $this->model->getPro($id_producto);
+                    $stock = $stock_actual["cantidad"] - $cantidad;
+                    $this->model->updateStock($stock, $id_producto);
+                }
+                $empty_details = $this->model->emptyDetails('detalle_venta_temp', $id_usuario);
+                if ($empty_details == 'ok') {
+                    $msg = array('msg' => 'Se ha generado la venta', 'id_venta' => $id_venta["id"], 'icono' => 'warning');
+                }
+            } else {
+                $msg = array('msg' => 'error al realizar la venta', 'icono' => 'error');
+            }
+        }
+        echo json_encode($msg);
+        die();
+    }
+
     public function delete($id)
     {
 
@@ -153,7 +191,7 @@ class Compras extends Controller
         $fecha = date('Y-m-d');
         $hora = date('H:i:s');
         $total = $this->model->calBuy_Sale('detalle', $id_usuario);
-        $data = $this->model->r_buy($total["total"],$fecha,$hora);
+        $data = $this->model->r_buy($total["total"], $fecha, $hora);
         if ($data == "ok") {
 
             $id_compra = $this->model->getId('compras');
@@ -175,40 +213,6 @@ class Compras extends Controller
             }
         } else {
             $msg = array('msg' => 'error al realizar la compra', 'icono' => 'error');
-        }
-        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-        die();
-    }
-
-    public function registrarVenta($id_cliente)
-    {
-        $id_usuario = $_SESSION["id_usuario"];
-        $fecha = date('Y-m-d');
-        $hora = date('H:i:s');
-        $total = $this->model->calBuy_Sale('detalle_venta_temp', $id_usuario);
-        $data = $this->model->r_sale($id_usuario, $id_cliente, $total["total"], $fecha, $hora);
-        if ($data == "ok") {
-
-            $id_venta = $this->model->getId('ventas');
-            $details = $this->model->getDetails('detalle_venta_temp', $id_usuario);
-            foreach ($details as $row) {
-                $cantidad = $row["cantidad"];
-                $desc = $row["descuento"];
-                $precio = $row["precio"];
-                $id_producto = $row["id_producto"];
-                $sub_total = ($cantidad * $precio) - $desc;
-                $this->model->register_details_sale($id_venta["id"], $id_producto, $cantidad, $desc, $precio, $sub_total);
-                $stock_actual = $this->model->getPro($id_producto);
-                $stock = $stock_actual["cantidad"] - $cantidad;
-                $this->model->updateStock($stock, $id_producto);
-            }
-            $empty_details = $this->model->emptyDetails('detalle_venta_temp', $id_usuario);
-            if ($empty_details == 'ok') {
-
-                $msg = array('msg' => 'Se ha generado la venta', 'id_venta' => $id_venta["id"]);
-            }
-        } else {
-            $msg = array('msg' => 'error al realizar la venta', 'icono' => 'error');
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();

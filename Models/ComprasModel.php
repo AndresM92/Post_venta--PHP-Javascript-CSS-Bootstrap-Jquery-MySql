@@ -88,7 +88,7 @@ class ComprasModel extends Query
     public function updateDetails(string $table, int $id_producto, int $id_usuario, string $precio, int $cantidad, string $sub_total)
     {
 
-        $sql = "UPDATE detalle SET precio=? , cantidad=?, sub_total=? WHERE id_producto=? AND id_usuario=?";
+        $sql = "UPDATE $table SET precio=? , cantidad=?, sub_total=? WHERE id_producto=? AND id_usuario=?";
         $datos = array($precio, $cantidad, $sub_total, $id_producto, $id_usuario);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
@@ -99,11 +99,11 @@ class ComprasModel extends Query
         return $res;
     }
 
-    public function r_buy(string $total,string $fecha,string $hora)
+    public function r_buy(string $total, string $fecha, string $hora)
     {
 
         $sql = "INSERT INTO compras (total,fecha,hora) VALUES(?,?,?)";
-        $datos = array($total,$fecha,$hora);
+        $datos = array($total, $fecha, $hora);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
@@ -113,11 +113,11 @@ class ComprasModel extends Query
         return $res;
     }
 
-    public function r_sale(int $id_usuario,int $id_cliente, string $total,string $fecha,string $hora)
+    public function r_sale(int $id_usuario, int $id_cliente, string $total, string $fecha, string $hora)
     {
 
         $sql = "INSERT INTO ventas (id_usuario,id_cliente,total,fecha,hora) VALUES(?,?,?,?,?)";
-        $datos = array($id_usuario,$id_cliente, $total,$fecha,$hora);
+        $datos = array($id_usuario, $id_cliente, $total, $fecha, $hora);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
@@ -197,7 +197,7 @@ class ComprasModel extends Query
         return $data;
     }
 
-    public function getProsale(int $id_venta)
+    public function getProSale(int $id_venta)
     {
         $sql = "SELECT v.*,d.*,p.id,p.descripcion
         FROM ventas v
@@ -283,10 +283,11 @@ class ComprasModel extends Query
         return $data;
     }
 
-    public function getAnular(int $id_compra){
+    public function getAnular(int $id_compra)
+    {
 
         $sql = "UPDATE compras SET estado=?  WHERE id=?";
-        $datos = array(0,$id_compra);
+        $datos = array(0, $id_compra);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
@@ -294,5 +295,16 @@ class ComprasModel extends Query
             $res = "error";
         }
         return $res;
+    }
+
+    public function checkBox(int $id_usuario)
+    {
+
+        $sql = "SELECT * 
+        FROM cierre_caja
+        WHERE id_usuario= $id_usuario AND estado=1";
+
+        $data = $this->select($sql);
+        return $data;
     }
 }

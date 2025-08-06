@@ -2,8 +2,14 @@
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">Cajas</li>
 </ol>
-<button class="btn btn-primary mb-2" type="button" onclick="frmArqueoBox();"><i class="fas fa-plus"></i></button>
-<button class="btn btn-warning mb-2" type="button" onclick="close_box();">Cerrar Caja</button>
+
+
+
+<button id="btn_open_arqueo" class="btn btn-primary mb-2 <?php echo $data != "" ? 'd-none' : '' ?>" type="button" onclick="frmArqueoBox();"><i class="fas fa-plus"></i>Abrir Caja</button>
+<button id="btn_close_arqueo" class="btn btn-warning mb-2 <?php echo $data == "" ? 'd-none' : '' ?>" type="button" onclick="close_box();"><i class="fas fa-close"></i>Cerrar Caja</button>
+
+
+
 
 <table class="table table-dark table-bordered" id="ta_Arqueo">
     <thead class="thead-dark">
@@ -31,14 +37,14 @@
             <div class="modal-body">
                 <form method="post" id="frmOpenBox" onsubmit="Open_Arqueo(event)">
                     <div class="form-floating mb-3">
-                        <input id="monto_inicial" class="form-control" type="text" name="monto_inicial" placeholder="Monto Inicial" require>
                         <input type="hidden" id="id" name="id">
+                        <input id="monto_inicial" class="form-control" type="text" name="monto_inicial" placeholder="Monto Inicial" required>
                         <label for="monto_inicial">Monto inicial</label>
                     </div>
 
                     <div id="ocultar_campos">
                         <div class="form-floating mb-3">
-                            <input id="monto_final" class="form-control" name="monto_final" type="text" disabled>
+                            <input meth id="monto_final" class="form-control" name="monto_final" type="text" disabled>
                             <label for="monto_final">Monto Final</label>
                         </div>
 

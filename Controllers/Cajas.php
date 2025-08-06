@@ -20,7 +20,8 @@ class Cajas extends Controller
 
     public function arqueo()
     {
-        $this->views->getView($this, "arqueo");
+        $data=$this->model->btnArqueo();
+        $this->views->getView($this, "arqueo",$data);
     }
 
     public function abrirArqueo()
@@ -187,7 +188,6 @@ class Cajas extends Controller
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
-
 
     public function salir()
     {
