@@ -10,6 +10,7 @@
     <title>Panel Adimn</title>
     <link href="<?php echo base_url; ?>Assets/css/style.min.css" rel="stylesheet" />
     <link href="<?php echo base_url; ?>Assets/css/styles.css" rel="stylesheet" />
+    <link href="<?php echo base_url; ?>Assets/css/estilos.css" rel="stylesheet" />
     <link href="<?php echo base_url; ?>Assets/DataTables/datatables.min.css" rel="stylesheet">
     <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
     <link href="<?php echo base_url; ?>Assets/css/select2.min.css" rel="stylesheet" />
@@ -27,7 +28,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!" data-toggle="modal" data-target="#changePass">Perfil</a></li>
+                    <li><a class="dropdown-item" href="#!" data-bs-toggle="modal" data-bs-target="#changePass">Perfil</a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>

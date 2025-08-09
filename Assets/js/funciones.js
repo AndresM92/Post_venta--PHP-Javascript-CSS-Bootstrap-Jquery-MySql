@@ -1255,11 +1255,12 @@ function btn_delete_Measure(id) {
 
 /////////////////////////////////////////////////Productos///////////////////////////////////
 function frmProducts() {
-    document.getElementById("title").innerHTML = "Nuevo Producto";
-    document.getElementById("btnAction").innerHTML = "Registrar";
+    document.getElementById("title").textContent = "Nuevo Producto";
+    document.getElementById("btnAction").textContent = "Registrar";
     document.getElementById("frmProduct").reset();
     document.getElementById("id").value = "";
-    $("#new_product").modal("show");
+    myModal.show();
+    //$("#new_product").modal("show");
     deleteImg();
 }
 
@@ -1273,7 +1274,6 @@ function register_product(e) {
     const id_medida = document.getElementById("medida");
     const id_categoria = document.getElementById("categoria");
 
-    // Validaciones
     if (codigo.value == "" || descripcion.value == "" || precio_compra.value == "" || precio_venta.value == "") {
         Swal.fire({
             icon: "error",
@@ -1302,7 +1302,8 @@ function register_product(e) {
                                 timer: 3000
                             });
                             frm.reset();
-                            $("#new_product").modal("hide");
+                            myModal.hide();
+                            //$("#new_product").modal("hide");
                             t_Productos.ajax.reload();
 
                         } else if (response.msg == "Producto modificado con éxito") {
@@ -1313,7 +1314,7 @@ function register_product(e) {
                                 timer: 3000
                             });
                             //frm.reset();
-                            $("#new_product").modal("hide");
+                            myModal.hide();
                             t_Productos.ajax.reload(null, true);
 
 
@@ -1347,8 +1348,8 @@ function register_product(e) {
 }
 
 function btn_edit_Product(id) {
-    document.getElementById("title").innerHTML = "Actualizar Producto";
-    document.getElementById("btnAction").innerHTML = "Modificar";
+    document.getElementById("title").textContent = "Actualizar Producto";
+    document.getElementById("btnAction").textContent = "Modificar";
     const url = base_url + "Productos/editar/" + id;
     const http = new XMLHttpRequest();
     http.open("GET", url, true);
@@ -1371,7 +1372,8 @@ function btn_edit_Product(id) {
                 <i class="fas fa-times"></i> </button>`;
             document.getElementById("icon-image").classList.add("d-none");
             document.getElementById("foto_actual").value = res.foto;
-            $("#new_product").modal("show");
+            myModal.show();
+            //$("#new_product").modal("show");
         }
     };
 }
@@ -2071,7 +2073,29 @@ function close_box() {
 
 }
 
+function reg_permisos(e) {
 
+    e.preventDefault();
+    const url = base_url + "Usuarios/registrarPermisos";
+    const frm = document.getElementById('frm_permisos');
+    const http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.send(new FormData(frm));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            if (response.msg != '') {
+                Swal.fire(
+                    response.msg,
+                    '',
+                    response.icono
+                )
+            }
+        }
+
+    }
+}
 
 
 
