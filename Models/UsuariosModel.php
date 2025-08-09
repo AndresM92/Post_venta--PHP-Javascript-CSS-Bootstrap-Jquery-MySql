@@ -81,7 +81,7 @@ class UsuariosModel extends Query
         return $data;
     }
 
-    public function getPass(string $pass,int $id)
+    public function getPass(string $pass, int $id)
     {
         $sql = "SELECT * FROM usuarios WHERE pass='$pass' AND id=$id";
         $data = $this->select($sql);
@@ -114,5 +114,47 @@ class UsuariosModel extends Query
         $datos = array($pass, $this->id);
         $data = $this->save($sql, $datos);
         return $data;
+    }
+
+    public function getPermisos()
+    {
+        $sql = "SELECT * FROM permisos";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
+
+    public function getDetallePermisos(int $id_usuario)
+    {
+        $sql = "SELECT * FROM detalle_permisos WHERE id_usuario=$id_usuario";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
+
+    public function registrarPermisos(int $id_usuario, int $id_permiso)
+    {
+
+        $sql = "INSERT INTO detalle_permisos (id_usuario,id_permiso) VALUES (?,?)";
+        $datos = array($id_usuario, $id_permiso);
+        $data = $this->save($sql, $datos);
+        if ($data == 1) {
+            $res = 'ok';
+        } else {
+            $res = 'error';
+        }
+        return $res;
+    }
+
+    public function deletePermisos(int $id_usuario)
+    {
+
+        $sql = "DELETE FROM detalle_permisos WHERE id_usuario=?";
+        $datos = array($id_usuario);
+        $data = $this->save($sql, $datos);
+        if ($data == 1) {
+            $res = 'ok';
+        } else {
+            $res = 'error';
+        }
+        return $res;
     }
 }

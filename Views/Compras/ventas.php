@@ -8,32 +8,32 @@
         <form action="" id="frmSale">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
                         <label for="codigo"><i class="fas fa-barcode"></i> Codigo de Barras</label>
                         <input type="hidden" id="id" name="id">
                         <input id="codigo" class="form-control" type="text" name="codigo" placeholder="Codigo de Barras" onkeyup="search_Codigo_Sale(event)">
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
                         <label for="nombre">Descripcion</label>
                         <input id="nombre" class="form-control" type="text" name="nombre" placeholder="Descripcion del Producto" disabled>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
                         <label for="cantidad">Cant</label>
                         <input id="cantidad" class="form-control" type="number" name="cantidad" placeholder="Cant" onkeyup="Calc_Price_Sale(event)" disabled>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
                         <label for="precio">Precio</label>
                         <input id="precio" class="form-control" type="text" name="precio" placeholder="Precio Venta" disabled>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
                         <label for="sub_total">SubTotal</label>
                         <input id="sub_total" class="form-control" type="text" name="sub_total" placeholder="SubTotal" disabled>
                     </div>
