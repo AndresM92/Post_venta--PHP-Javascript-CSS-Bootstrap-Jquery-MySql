@@ -21,27 +21,30 @@ class Usuarios extends Controller
     public function listar()
     {
 
-        $btn_disabled = 'disabled';
-        //print_r($this->model->getUsuarios());
+        //$btn_disabled = 'disabled';
         $data = $this->model->getUsuarios();
         for ($i = 0; $i < count($data); $i++) {
             if ($data[$i]['estado'] == 1) {
-                $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
-                $btn_disabled = 'disabled';
+                $data[$i]['estado'] = '<span class="badge bg-success">Activo</span>';
+
+                if ($data[$i]['id'] == 16) {
+                    $data[$i]['acciones'] = '<div>
+                        <span class="badge bg-primary">Administrador</span>
+                    </div>';
+                } else {
+                    $data[$i]['acciones'] =
+                        '<div>
+                    <a class="btn btn-dark" href="' . base_url . 'Usuarios/permisos/' . $data[$i]['id'] . '"><i class= "fas fa-key"></i></a>
+                    <button class="btn btn-primary" type="button" onclick="btn_edit_User(' . $data[$i]['id'] . ');"><i class= "fas fa-edit"></i></button>
+                    <button class="btn btn-danger" type="button" onclick="btn_delete_User(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
+                </div>';
+                }
             } else {
-                $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
-                $btn_disabled = '';
+                $data[$i]['estado'] = '<div><span class="badge bg-danger">Inactivo</span></div>';
+                $data[$i]['acciones'] = '<div>
+                 <button id="reingresar_' . $data[$i]['id'] . '" class="btn btn-success"  type="button"  onclick="btn_reingre_User(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
+                 </div>';
             }
-
-            $data[$i]['acciones'] =
-                '<div>
-                <button class="btn btn-primary" type="button" onclick="btn_edit_User(' . $data[$i]['id'] . ');"><i class= "fas fa-edit"></i></button>
-                <button class="btn btn-danger" type="button" onclick="btn_delete_User(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
-
-                
-                <button   id="reingresar_' . $data[$i]['id'] . '" class="btn btn-success"  type="button" ' . $btn_disabled . ' onclick="btn_reingre_User(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
-
-             </div>';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
@@ -163,10 +166,10 @@ class Usuarios extends Controller
             } else {
                 $id = $_SESSION["id_usuario"];
                 $hash = hash("SHA256", $actual);
-                $data = $this->model->getPass($hash,$id);
+                $data = $this->model->getPass($hash, $id);
 
                 if (!empty($data)) {
-                    
+
                     $check = $this->model->modificarPass(hash("SHA256", $nueva), $id);
                     if ($check == 1) {
                         $msg = array('msg' => 'Contraseña modificada con exito', 'icono' => 'success');
@@ -180,6 +183,43 @@ class Usuarios extends Controller
         }
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
+    }
+
+    public function permisos($id)
+    {
+        if (empty($_SESSION["session_active"])) {
+            header("location: " . base_url);
+        }
+        $data['datos'] = $this->model->getPermisos();
+        $permisos = $this->model->getDetallePermisos($id);
+        $data['asigandos'] = array();
+
+        foreach ($permisos as $p) {
+            $data['asignados'][$p['id_permiso']] = true;
+        }
+
+        $data['id_usuario'] = $id;
+        $this->views->getView($this, "permisos", $data);
+    }
+
+    public function registrarPermisos()
+    {
+        $msg = '';
+        $id_usuario = $_POST['id_usuario'];
+        $delete = $this->model->deletePermisos($id_usuario);
+        if ($delete == 'ok') {
+            foreach ($_POST['permisos'] as $id_permiso) {
+                $msg = $this->model->registrarPermisos($id_usuario, $id_permiso);
+            }
+            if ($msg == 'ok') {
+                $msg = array('msg' => 'Permisos Asignados', 'icono' => 'success');
+            } else {
+                $msg = array('msg' => 'Error al asignar los permisos', 'icono' => 'error');
+            }
+        } else {
+            $msg = array('msg' => 'Error al eliminar los permisos anteriores', 'icono' => 'error');
+        }
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
     }
 
     public function salir()

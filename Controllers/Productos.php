@@ -28,11 +28,11 @@ class Productos extends Controller
         for ($i = 0; $i < count($data); $i++) {
             $data[$i]['imagen'] = '<img class="img-thumbnail" src="' . base_url . "Assets/img/" . $data[$i]['foto'] . '"width="100">';
             if ($data[$i]['estado'] == 1) {
-                $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
+                $data[$i]['estado'] = '<span class="badge bg-success">Activo</span>';
                 $btn_disabled = 'disabled';
                 $btn_disabled_eliminar = '';
             } else {
-                $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
+                $data[$i]['estado'] = '<span class="badge bg-danger">Inactivo</span>';
                 $btn_disabled = '';
                 $btn_disabled_eliminar = 'disabled';
             }

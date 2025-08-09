@@ -15,6 +15,14 @@ class Administracion extends Controller
 
     public function index()
     {
+        $id_usuario=$_SESSION["id_usuario"];
+        $verificar=$this->model->checkPermiso($id_usuario,'configuracion');
+        if (!empty($verificar)) {
+            $data=$this->model->getEmpresa();
+            $this->views->getView($this,"index",$data);
+        }else{
+            header('location:'.base_url.'Errors/permisos');
+        }
         $data = $this->model->getEmpresa();
         $this->views->getView($this, "index", $data);
     }
