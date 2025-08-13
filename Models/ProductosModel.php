@@ -2,7 +2,7 @@
 
 class ProductosModel extends Query
 {
-    private $codigo, $descripcion, $precio_compra, $precio_venta, $id_medida, $id_categoria,$id,$estado,$foto;
+    private $codigo, $descripcion, $precio_compra, $precio_venta, $id_medida, $id_categoria, $id, $estado, $foto;
 
     public function __construct()
     {
@@ -33,7 +33,7 @@ class ProductosModel extends Query
         return $data;
     }
 
-    public function registrar_producto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta,int $id_medida, int $id_categoria,string $img)
+    public function registrar_producto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta, int $id_medida, int $id_categoria, string $img)
     {
 
         $this->codigo = $codigo;
@@ -48,7 +48,7 @@ class ProductosModel extends Query
         $existe = $this->select($verificar);
         if (empty($existe)) {
             $sql = "INSERT INTO productos (codigo,descripcion,precio_compra,precio_venta,id_medida,id_categoria,foto) VALUES (?,?,?,?,?,?,?)";
-            $datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta,$this->id_medida,$this->id_categoria,$this->foto);
+            $datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta, $this->id_medida, $this->id_categoria, $this->foto);
             $data = $this->save($sql, $datos);
             if ($data == 1) {
                 $res = "ok";
@@ -61,7 +61,7 @@ class ProductosModel extends Query
         return $res;
     }
 
-    public function modi_producto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta,int $id_medida, int $id_categoria,string $img, int $id)
+    public function modi_producto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta, int $id_medida, int $id_categoria, string $img, int $id)
     {
 
         $this->codigo = $codigo;
@@ -71,10 +71,10 @@ class ProductosModel extends Query
         $this->id_medida = $id_medida;
         $this->id_categoria = $id_categoria;
         $this->foto = $img;
-        $this->id=$id;
+        $this->id = $id;
 
         $sql = "UPDATE productos SET codigo=?,descripcion=?,precio_compra=?,precio_venta=?,id_medida=?,id_categoria=?,foto=? WHERE id=?";
-        $datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta,$this->id_medida,$this->id_categoria,$this->foto, $this->id);
+        $datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta, $this->id_medida, $this->id_categoria, $this->foto, $this->id);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "upda";
@@ -107,6 +107,20 @@ class ProductosModel extends Query
         $sql = "UPDATE productos SET estado=? WHERE id=?";
         $datos = array($this->estado, $this->id);
         $data = $this->save($sql, $datos);
+        return $data;
+    }
+    
+    public function checkPermiso(int $id_usuario, string $nombre)
+    {
+
+        $sql = "SELECT p.id,p.permiso, d.id,d.id_usuario,d.id_permiso 
+              FROM permisos p 
+              INNER JOIN detalle_permisos d
+              ON p.id=d.id_permiso
+              WHERE d.id_usuario=$id_usuario
+              AND p.permiso='$nombre'";
+
+        $data = $this->selectAll($sql);
         return $data;
     }
 }

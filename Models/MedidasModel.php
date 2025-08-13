@@ -2,7 +2,7 @@
 
 class MedidasModel extends Query
 {
-    private $nombre,$id,$estado,$nombre_corto;
+    private $nombre, $id, $estado, $nombre_corto;
 
     public function __construct()
     {
@@ -16,7 +16,7 @@ class MedidasModel extends Query
         return $data;
     }
 
-    public function registrar_measures(string $nombre,string $nombre_corto)
+    public function registrar_measures(string $nombre, string $nombre_corto)
     {
 
         $this->nombre = $nombre;
@@ -25,7 +25,7 @@ class MedidasModel extends Query
         $existe = $this->select($verificar);
         if (empty($existe)) {
             $sql = "INSERT INTO medidas (nombre,nombre_corto) VALUES (?,?)";
-            $datos = array($this->nombre,$this->nombre_corto);
+            $datos = array($this->nombre, $this->nombre_corto);
             $data = $this->save($sql, $datos);
             if ($data == 1) {
                 $res = "ok";
@@ -40,12 +40,12 @@ class MedidasModel extends Query
 
     public function modi_measure(string $nombre, string $nombre_corto, int $id)
     {
-        $this->nombre=$nombre;
+        $this->nombre = $nombre;
         $this->nombre_corto = $nombre_corto;
         $this->id = $id;
 
         $sql = "UPDATE medidas SET nombre=?, nombre_corto=? WHERE id=?";
-        $datos = array($this->nombre,$this->nombre_corto,$this->id);
+        $datos = array($this->nombre, $this->nombre_corto, $this->id);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "upda";
@@ -72,7 +72,7 @@ class MedidasModel extends Query
         return $data;
     }
 
-   /* public function reingresar_box(int $id, int $estado)
+    /* public function reingresar_box(int $id, int $estado)
     {
         $this->id = $id;
         $this->estado = $estado;
@@ -81,4 +81,18 @@ class MedidasModel extends Query
         $data = $this->save($sql, $datos);
         return $data;
     } */
+
+    public function checkPermiso(int $id_usuario, string $nombre)
+    {
+
+        $sql = "SELECT p.id,p.permiso, d.id,d.id_usuario,d.id_permiso 
+              FROM permisos p 
+              INNER JOIN detalle_permisos d
+              ON p.id=d.id_permiso
+              WHERE d.id_usuario=$id_usuario
+              AND p.permiso='$nombre'";
+
+        $data = $this->selectAll($sql);
+        return $data;
+    }
 }

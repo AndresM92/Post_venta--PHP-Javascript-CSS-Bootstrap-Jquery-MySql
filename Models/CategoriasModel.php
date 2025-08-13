@@ -2,7 +2,7 @@
 
 class CategoriasModel extends Query
 {
-    private $nombre,$id,$estado;
+    private $nombre, $id, $estado;
 
     public function __construct()
     {
@@ -44,7 +44,7 @@ class CategoriasModel extends Query
         $this->id = $id;
 
         $sql = "UPDATE categorias SET nombre=? WHERE id=?";
-        $datos = array($this->nombre,$this->id);
+        $datos = array($this->nombre, $this->id);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "upda";
@@ -78,6 +78,20 @@ class CategoriasModel extends Query
         $sql = "UPDATE categorias SET estado=? WHERE id=?";
         $datos = array($this->estado, $this->id);
         $data = $this->save($sql, $datos);
+        return $data;
+    }
+
+    public function checkPermiso(int $id_usuario, string $nombre)
+    {
+
+        $sql = "SELECT p.id,p.permiso, d.id,d.id_usuario,d.id_permiso 
+              FROM permisos p 
+              INNER JOIN detalle_permisos d
+              ON p.id=d.id_permiso
+              WHERE d.id_usuario=$id_usuario
+              AND p.permiso='$nombre'";
+
+        $data = $this->selectAll($sql);
         return $data;
     }
 }
