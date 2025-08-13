@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 { data: 'estado' },
                 { data: 'acciones' }
             ],
-            dom: '<"row"<"col-sm-2"l><"col-sm-8 text-center"B><"col-sm-2"f>>' +
+            dom:'<"row"<"col-sm-2"l><"col-sm-8 text-center"B><"col-sm-2"f>>' +
                 '<"row"<"col-sm-12"tr>>' +
                 '<"row"<"col-sm-5"i><"col-sm-7"p>>',
 
@@ -527,55 +527,35 @@ function register_customer(e) {
 
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                const contentType = this.getResponseHeader('Content-Type');
-                if (contentType && contentType.includes('application/json')) {
-                    try {
-
-                        const response = JSON.parse(this.responseText);
-                        if (response.msg == "Cliente registrado con éxito") {
-                            Swal.fire({
-                                title: "Registrado Exitosamente",
-                                icon: "success",
-                                draggable: true,
-                                timer: 3000
-                            });
-                            frm.reset();
-                            $("#new_customer").modal("hide");
-                            t_Clientes.ajax.reload();
-
-                        } else if (response.msg == "Cliente modificado con éxito") {
-                            Swal.fire({
-                                title: "Cliente modificado con éxito",
-                                icon: "success",
-                                draggable: true,
-                                timer: 3000
-                            });
-                            //frm.reset();
-                            $("#new_customer").modal("hide");
-                            t_Clientes.ajax.reload(null, true);
-                        }
-                        else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: response.msg,
-                                timer: 3000
-                            });
-                        }
-                    } catch (e) {
-                        console.error("Error al parsear JSON:", e);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Hubo un problema con la respuesta del servidor.',
-                            timer: 3000
-                        });
-                    }
-                } else {
-                    console.error("La respuesta del servidor no es JSON. Respuesta recibida:", this.responseText);
+                const response = JSON.parse(this.responseText);
+                if (response.msg == "Cliente registrado con éxito") {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'La respuesta del servidor no es válida.',
+                        title: "Registrado Exitosamente",
+                        icon: "success",
+                        draggable: true,
                         timer: 3000
                     });
+                    frm.reset();
+                    $("#new_customer").modal("hide");
+                    t_Clientes.ajax.reload();
+
+                } else if (response.msg == "Cliente modificado con éxito") {
+                    Swal.fire({
+                        title: "Cliente modificado con éxito",
+                        icon: "success",
+                        draggable: true,
+                        timer: 3000
+                    });
+                    $("#new_customer").modal("hide");
+                    t_Clientes.ajax.reload(null, true);
+                }
+                else {
+                    Swal.fire({
+                        icon: response.icono,
+                        title: response.msg,
+                        timer: 3000
+                    });
+                    $("#new_customer").modal("hide");              
                 }
             }
         };
@@ -1600,6 +1580,14 @@ function Calc_Price_Sale(e) {
                             timer: 2000
                         });
                         frm.reset();
+                    }else{
+                        Swal.fire({
+                            title: response.msg,
+                            icon: response.icono,
+                            draggable: true,
+                            timer: 2000
+                        });
+                        frm.reset();
                     }
                     document.getElementById("cantidad").setAttribute("disabled", "disable");
                     document.getElementById("codigo").focus();
@@ -1769,10 +1757,10 @@ function generate_Purchase_Sale(accion) {
 
             let url;
             if (accion == 1) {
-                url = base_url + "compras/registrarCompra/";
+                url = base_url + "Compras/registrarCompra/";
             } else {
                 const id_cliente = document.getElementById("cliente_Search").value;
-                url = base_url + "compras/registrarVenta/" + id_cliente;
+                url = base_url + "Compras/registrarVenta/" + id_cliente;
             }
             const http = new XMLHttpRequest();
             http.open("GET", url, true);
@@ -1788,7 +1776,6 @@ function generate_Purchase_Sale(accion) {
                             '',
                             response.icono
                         )
-
                         if (response.icono != 'info') {
                             ruta = base_url + 'Compras/generarPdf/' + response.id_compra;
                             window.open(ruta);
