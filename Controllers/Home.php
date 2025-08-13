@@ -3,9 +3,6 @@
 class Home extends Controller
 {
 
-
-    #public $views;
-
     public function __construct()
     {
         session_start();

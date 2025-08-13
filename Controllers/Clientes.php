@@ -8,17 +8,21 @@ class Clientes extends Controller
         #$model = new UsuariosModel();
         session_start();
 
-        if(empty($_SESSION["session_active"])){
-            header("location: ".base_url);
+        if (empty($_SESSION["session_active"])) {
+            header("location: " . base_url);
         }
         parent::__construct();
     }
 
     public function index()
     {
-        
-        $this->views->getView($this, "index");
-
+        $id_usuario = $_SESSION["id_usuario"];
+        $verificar = $this->model->checkPermiso($id_usuario, 'clientes');
+        if (!empty($verificar) || $id_usuario == 16) {
+            $this->views->getView($this, "index");
+        } else {
+            header('location:' . base_url . 'Errors/permisos');
+        }
     }
 
     public function listar()
@@ -41,8 +45,8 @@ class Clientes extends Controller
             $data[$i]['acciones'] =
                 '<div>
                 <button class="btn btn-primary" type="button" onclick="btn_edit_Customer(' . $data[$i]['id'] . ');"><i class= "fas fa-edit"></i></button>
-                <button id="eliminar_' . $data[$i]['id'] . '" class="btn btn-danger" type="button" '.$btn_disabled_eliminar.' onclick="btn_delete_Customer(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
-                <button id="reingresar_' . $data[$i]['id'] . '"class="btn btn-success"  type="button" '.$btn_disabled_reingresar.' onclick="btn_reingre_Customer(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
+                <button id="eliminar_' . $data[$i]['id'] . '" class="btn btn-danger" type="button" ' . $btn_disabled_eliminar . ' onclick="btn_delete_Customer(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
+                <button id="reingresar_' . $data[$i]['id'] . '"class="btn btn-success"  type="button" ' . $btn_disabled_reingresar . ' onclick="btn_reingre_Customer(' . $data[$i]['id'] . ');"><i class= "fa-solid fa-arrow-up"></i></button>
 
              </div>';
         }
@@ -52,16 +56,20 @@ class Clientes extends Controller
 
     public function registrar()
     {
-        $cc = $_POST["cc"];
-        $nombre = $_POST["nombre"];
-        $telefono = $_POST["telefono"];
-        $direccion = $_POST["direccion"];
-        $id = $_POST["id"];
 
-        if (empty($nombre) || empty($cc) || empty($telefono) || empty($direccion)) {
-            $msg = array('msg' => 'Todos los campos son obligatorios', 'icono' => 'info');
-        } else {
-            if (empty($id)){
+        $id_usuario = $_SESSION["id_usuario"];
+        $verificar = $this->model->checkPermiso($id_usuario, 'registrar_clientes');
+        if (!empty($verificar) || $id_usuario == 16) {
+            $cc = $_POST["cc"];
+            $nombre = $_POST["nombre"];
+            $telefono = $_POST["telefono"];
+            $direccion = $_POST["direccion"];
+            $id = $_POST["id"];
+
+            if (empty($nombre) || empty($cc) || empty($telefono) || empty($direccion)) {
+                $msg = array('msg' => 'Todos los campos son obligatorios', 'icono' => 'info');
+            } else {
+                if (empty($id)) {
                     $data = $this->model->registrar_customers($cc, $nombre, $telefono, $direccion);
                     if ($data == "ok") {
                         $msg = array('msg' => 'Cliente registrado con éxito', 'icono' => 'success');
@@ -70,17 +78,18 @@ class Clientes extends Controller
                     } else {
                         $msg = array('msg' => 'Error al registrar el cliente', 'icono' => 'error');
                     }
-            } else {
-                $data = $this->model->modi_customer($cc, $nombre, $telefono, $direccion,$id);
-                //print_r($data);
-                if ($data == "upda") {
-                    $msg = array('msg' => 'Cliente modificado con éxito', 'icono' => 'success');
                 } else {
-                    $msg = array('msg' => 'Error al modificar el cliente', 'icono' => 'error');
+                    $data = $this->model->modi_customer($cc, $nombre, $telefono, $direccion, $id);
+                    if ($data == "upda") {
+                        $msg = array('msg' => 'Cliente modificado con éxito', 'icono' => 'success');
+                    } else {
+                        $msg = array('msg' => 'Error al modificar el cliente', 'icono' => 'error');
+                    }
                 }
             }
+        } else {
+            $msg = array('msg' => 'No tienes permisos para registar clientes', 'icono' => 'warning');
         }
-        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
     }
@@ -95,7 +104,7 @@ class Clientes extends Controller
     public function eliminar(int $id)
     {
 
-        $data = $this->model->delete_customer($id,0);
+        $data = $this->model->delete_customer($id, 0);
         if ($data == 1) {
             $msg = array('msg' => 'Cliente eliminado con exito', 'icono' => 'success');
         } else {
@@ -109,7 +118,7 @@ class Clientes extends Controller
     public function reingresar(int $id)
     {
 
-        $data = $this->model->reingresar_customer($id,1);
+        $data = $this->model->reingresar_customer($id, 1);
         if ($data == 1) {
             $msg = array('msg' => 'Cliente reingresado con exito', 'icono' => 'success');
         } else {
@@ -120,8 +129,9 @@ class Clientes extends Controller
         die();
     }
 
-    public function salir (){
+    public function salir()
+    {
         session_destroy();
-        header("location:".base_url);
+        header("location:" . base_url);
     }
 }

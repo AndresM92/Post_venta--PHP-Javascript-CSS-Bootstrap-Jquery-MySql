@@ -15,7 +15,13 @@ class Cajas extends Controller
 
     public function index()
     {
-        $this->views->getView($this, "index");
+        $id_usuario = $_SESSION["id_usuario"];
+        $verificar = $this->model->checkPermiso($id_usuario, 'cajas');
+        if (!empty($verificar) || $id_usuario == 16) {
+            $this->views->getView($this, "index");
+        } else {
+            header('location:' . base_url . 'Errors/permisos');
+        }
     }
 
     public function arqueo()

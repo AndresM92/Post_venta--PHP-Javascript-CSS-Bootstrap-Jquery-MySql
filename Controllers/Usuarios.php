@@ -8,20 +8,25 @@ class Usuarios extends Controller
         session_start();
         parent::__construct();
     }
-
     public function index()
     {
         if (empty($_SESSION["session_active"])) {
             header("location: " . base_url);
         }
-        $data['cajas'] = $this->model->getCajas();
-        $this->views->getView($this, "index", $data);
+
+        $id_usuario = $_SESSION["id_usuario"];
+        $verificar = $this->model->checkPermiso($id_usuario, 'usuarios');
+        if (!empty($verificar) || $id_usuario == 16) {
+            $data['cajas'] = $this->model->getCajas();
+            $this->views->getView($this, "index", $data);
+        } else {
+            header('location:' . base_url . 'Errors/permisos');
+        }
     }
 
     public function listar()
     {
 
-        //$btn_disabled = 'disabled';
         $data = $this->model->getUsuarios();
         for ($i = 0; $i < count($data); $i++) {
             if ($data[$i]['estado'] == 1) {

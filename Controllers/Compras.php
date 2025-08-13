@@ -11,8 +11,13 @@ class Compras extends Controller
 
     public function index()
     {
-
-        $this->views->getView($this, "index");
+        $id_usuario = $_SESSION["id_usuario"];
+        $verificar = $this->model->checkPermiso($id_usuario, 'compras');
+        if (!empty($verificar) || $id_usuario == 16) {
+            $this->views->getView($this, "index");
+        } else {
+            header('location:' . base_url . 'Errors/permisos');
+        }
     }
 
     public function ventas()
@@ -85,29 +90,34 @@ class Compras extends Controller
         $check_detail = $this->model->consultDetails('detalle_venta_temp', $id_producto, $id_usuario);
 
         if (empty($check_detail)) {
-            $sub_total = $precio * $cantidad;
-            $data2 = $this->model->addDetalils('detalle_venta_temp', $id_producto, $id_usuario, $precio, $cantidad, $sub_total);
 
-            if ($data2 == "ok") {
-                $msg = array('msg' => 'El producto fue ingresado con exito', 'icono' => 'success');
+            if ($data['cantidad'] >= $cantidad) {
+                $sub_total = $precio * $cantidad;
+                $data2 = $this->model->addDetalils('detalle_venta_temp', $id_producto, $id_usuario, $precio, $cantidad, $sub_total);
+                if ($data2 == "ok") {
+                    $msg = array('msg' => 'El producto fue ingresado con exito', 'icono' => 'success');
+                } else {
+                    $msg = array('msg' => 'Error al ingresar el producto', 'icono' => 'error');
+                }
             } else {
-                $msg = array('msg' => 'Error al ingresar el producto', 'icono' => 'error');
+                $msg = array('msg' => 'Stock no disponible:' . $data["cantidad"], 'icono' => 'warning');
             }
-            echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-            die();
         } else {
             $total_cantidad = $check_detail["cantidad"] + $cantidad;
             $sub_total = $total_cantidad * $precio;
-            $data2 = $this->model->updateDetails('detalle_venta_temp', $id_producto, $id_usuario, $precio, $total_cantidad, $sub_total);
-
-            if ($data2 == "modificado") {
-                $msg = array('msg' => 'Se agrego la cantidad adicional', 'icono' => 'success');
+            if ($data['cantidad'] < $total_cantidad) {
+                $msg = array('msg' => 'Stock no disponible', 'icono' => 'warning');
             } else {
-                $msg = array('msg' => 'Error al agregar la cantidad', 'icono' => 'error');
+                $data2 = $this->model->updateDetails('detalle_venta_temp', $id_producto, $id_usuario, $precio, $total_cantidad, $sub_total);
+                if ($data2 == "modificado") {
+                    $msg = array('msg' => 'Se agrego la cantidad adicional', 'icono' => 'success');
+                } else {
+                    $msg = array('msg' => 'Error al agregar la cantidad', 'icono' => 'error');
+                }
             }
-            echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-            die();
         }
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+        die();
     }
 
     public function listar($tabla)

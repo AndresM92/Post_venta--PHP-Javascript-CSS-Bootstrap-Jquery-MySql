@@ -14,9 +14,16 @@ class Productos extends Controller
         if (empty($_SESSION["session_active"])) {
             header("location: " . base_url);
         }
-        $data['medidas'] = $this->model->getMeasures();
-        $data['categorias'] = $this->model->getCategories();
-        $this->views->getView($this, "index", $data);
+
+        $id_usuario = $_SESSION["id_usuario"];
+        $verificar = $this->model->checkPermiso($id_usuario, 'productos');
+        if (!empty($verificar) || $id_usuario == 16) {
+            $data['medidas'] = $this->model->getMeasures();
+            $data['categorias'] = $this->model->getCategories();
+            $this->views->getView($this, "index", $data);
+        } else {
+            header('location:' . base_url . 'Errors/permisos');
+        }
     }
 
     public function listar()

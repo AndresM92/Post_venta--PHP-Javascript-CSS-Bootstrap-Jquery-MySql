@@ -7,17 +7,21 @@ class Categorias extends Controller
     {
         session_start();
 
-        if(empty($_SESSION["session_active"])){
-            header("location: ".base_url);
+        if (empty($_SESSION["session_active"])) {
+            header("location: " . base_url);
         }
         parent::__construct();
     }
 
     public function index()
     {
-        
-        $this->views->getView($this, "index");
-
+        $id_usuario = $_SESSION["id_usuario"];
+        $verificar = $this->model->checkPermiso($id_usuario, 'categorias');
+        if (!empty($verificar) || $id_usuario == 16) {
+            $this->views->getView($this, "index");
+        } else {
+            header('location:' . base_url . 'Errors/permisos');
+        }
     }
 
     public function listar()
@@ -40,7 +44,7 @@ class Categorias extends Controller
             $data[$i]['acciones'] =
                 '<div>
                 <button class="btn btn-primary" type="button" onclick="btn_edit_Category(' . $data[$i]['id'] . ');"><i class= "fas fa-edit"></i></button>
-                <button id="eliminar_' . $data[$i]['id'] . '" class="btn btn-danger" type="button" '.$btn_disabled_eliminar.' onclick="btn_delete_Category(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
+                <button id="eliminar_' . $data[$i]['id'] . '" class="btn btn-danger" type="button" ' . $btn_disabled_eliminar . ' onclick="btn_delete_Category(' . $data[$i]['id'] . ');"><i class= "fas fa-trash-alt"></i></button>
              </div>';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -55,17 +59,17 @@ class Categorias extends Controller
         if (empty($nombre)) {
             $msg = array('msg' => 'Todos los campos son obligatorios', 'icono' => 'info');
         } else {
-            if (empty($id)){
-                    $data = $this->model->registrar_categories($nombre);
-                    if ($data == "ok") {
-                        $msg = array('msg' => 'Categoria registrado con éxito', 'icono' => 'success');
-                    } else if ($data == "existe") {
-                        $msg = array('msg' => 'La Categoria ya existe', 'icono' => 'info');
-                    } else {
-                        $msg = array('msg' => 'Error al registrar la Categoria', 'icono' => 'error');
-                    }
+            if (empty($id)) {
+                $data = $this->model->registrar_categories($nombre);
+                if ($data == "ok") {
+                    $msg = array('msg' => 'Categoria registrado con éxito', 'icono' => 'success');
+                } else if ($data == "existe") {
+                    $msg = array('msg' => 'La Categoria ya existe', 'icono' => 'info');
+                } else {
+                    $msg = array('msg' => 'Error al registrar la Categoria', 'icono' => 'error');
+                }
             } else {
-                $data = $this->model->modi_category($nombre,$id);
+                $data = $this->model->modi_category($nombre, $id);
                 if ($data == "upda") {
                     $msg = array('msg' => 'Categoria modificado con éxito', 'icono' => 'success');
                 } else {
@@ -88,7 +92,7 @@ class Categorias extends Controller
     public function eliminar(int $id)
     {
 
-        $data = $this->model->delete_category($id,0);
+        $data = $this->model->delete_category($id, 0);
         if ($data == 1) {
             $msg = array('msg' => 'Categoria eliminada con exito', 'icono' => 'success');
         } else {
@@ -99,7 +103,7 @@ class Categorias extends Controller
         die();
     }
 
-   /* public function reingresar(int $id)
+    /* public function reingresar(int $id)
     {
 
         $data = $this->model->reingresar_category($id,1);
@@ -113,8 +117,9 @@ class Categorias extends Controller
         die();
     }*/
 
-    public function salir (){
+    public function salir()
+    {
         session_destroy();
-        header("location:".base_url);
+        header("location:" . base_url);
     }
 }
