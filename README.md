@@ -2,12 +2,17 @@
 Es una aplicación web desarrollada con tecnologías como lo son PHP, JavaScript, Bootstrap y jQuery.  
 Está diseñada para gestionar procesos de post‑venta aplicando la arquitectura MVC con una interfaz de usuario moderna.  
 
-##  Tecnologías utilizadas  
-- **Backend / Lógica de servidor:** PHP (estructura MVC: Models, Views, Controllers)    
-- **Interfaz y frontend:** JavaScript, CSS y Bootstrap   
-- **Interactividad:** jQuery para dinamismo.  
-- **Base de datos:** MySQL (con conectividad mediante PHP).  
+##  Tecnologías principales
+
+| Capa          | Tecnologías                   |
+|---------------|------------------------------|
+| Backend       | PHP, JavaScript, MVC Architecture |
+| Frontend      | JavaScript, CSS y Bootstrap |
+| Interactividad| JQuery
+| Base de datos | MySQL                   |
+  
 - **Generación de documentos:** Biblioteca FPDF integrada (`libraries/fpdf`).  
+---
 - **Arquitectura de archivos:**    
   - `Assets/`: recursos visuales (imágenes, estilos, scripts adicionales).  
   - `Config/`: archivos de configuración (como conexión a BD, rutas, constantes).  
