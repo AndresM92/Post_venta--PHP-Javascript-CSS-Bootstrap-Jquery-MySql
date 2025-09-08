@@ -1,4 +1,4 @@
-**Post Venta** 
+**Post Venta**  
 Es una aplicación web desarrollada con tecnologías como lo son PHP, JavaScript, Bootstrap y jQuery.  
 Está diseñada para gestionar procesos de post‑venta aplicando la arquitectura MVC con una interfaz de usuario moderna.  
 
