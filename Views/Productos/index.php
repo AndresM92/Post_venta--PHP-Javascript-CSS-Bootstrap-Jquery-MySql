@@ -4,7 +4,7 @@
 </ol>
 <button class="btn btn-primary mb-2" onclick="frmProducts();">Nuevo <i class="fas fa-plus"></i></button>
 <div class="table-responsive">
-    <table class="table table-striped table-bordered" id="ta_Productos">
+    <table class="table table-striped " id="ta_Productos">
         <thead class="table-dark">
             <tr>
                 <th>Id</th>

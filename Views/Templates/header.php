@@ -11,7 +11,7 @@
     <link href="<?php echo base_url; ?>Assets/css/style.min.css" rel="stylesheet" />
     <link href="<?php echo base_url; ?>Assets/css/styles.css" rel="stylesheet" />
     <link href="<?php echo base_url; ?>Assets/css/estilos.css" rel="stylesheet" />
-    <link href="<?php echo base_url; ?>Assets/DataTables/datatables.min.css" rel="stylesheet">
+    <!--<link href="<?php echo base_url; ?>Assets/DataTables/datatables.min.css" rel="stylesheet">-->
     <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
     <link href="<?php echo base_url; ?>Assets/css/select2.min.css" rel="stylesheet" />
 </head>
@@ -44,20 +44,20 @@
                     <div class="nav">
 
                         <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-cogs mr-2 fa-2x"></i></div>
+                            <div class="sb-nav-link-icon"><img src="<?php echo base_url; ?>Assets/img/admin.png" style="max-width: 40px;"></div>
                             Administracion
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
                         </a>
 
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<?php echo base_url; ?>Usuarios"><i class="fas fa-user mr-2 text-primary"></i>Usuarios</a>
-                                <a class="nav-link" href="<?php echo base_url; ?>Administracion"><i class="fas fa-tools mr-2 text-primary"></i>Configuracion</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Usuarios"><img src="<?php echo base_url; ?>Assets/img/rols.png" style="max-width: 40px;">Usuarios</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Administracion"><img src="<?php echo base_url; ?>Assets/img/sett.png" style="max-width: 40px;">Configuracion</a>
                             </nav>
                         </div>
 
                         <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseCaja" aria-expanded="false" aria-controls="collapseCaja">
-                            <div class="sb-nav-link-icon"><i class="fas fa-box mr-2 fa-2x"></i></div>
+                            <div class="sb-nav-link-icon"><img src="<?php echo base_url; ?>Assets/img/cash_r.png" style="max-width: 40px;"></div>
                             Cajas
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
                         </a>
@@ -65,12 +65,12 @@
                         <div class="collapse" id="collapseCaja" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="<?php echo base_url; ?>Cajas"><i class="fas fa-box mr-2 text-primary"></i>Cajas</a>
-                                <a class="nav-link" href="<?php echo base_url; ?>Cajas/arqueo"><i class="fas fa-tools mr-2 text-primary"></i>Arqueo Caja</a>
+                                <a class="nav-link" href="<?php echo base_url; ?>Cajas/arqueo"><img src="<?php echo base_url; ?>Assets/img/arqueo.png" style="max-width: 40px;">Arqueo Caja</a>
                             </nav>
                         </div>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Clientes">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users mr-2 fa-2x"></i></div>
+                            <div class="sb-nav-link-icon"><img src="<?php echo base_url; ?>Assets/img/users.png" style="max-width: 40px;"></div>
                             Clientes
                         </a>
 
@@ -80,17 +80,17 @@
                         </a>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Categorias">
-                            <div class="sb-nav-link-icon"><i class="fa fa-table-list mr-2 fa-2x"></i></div>
+                            <div class="sb-nav-link-icon"><img src="<?php echo base_url; ?>Assets/img/category.png" style="max-width: 40px;"></div>
                             Categorias
                         </a>
 
                         <a class="nav-link" href="<?php echo base_url; ?>Productos">
-                            <div class="sb-nav-link-icon"><i class="fas fa-product-hunt mr-2 fa-2x"></i></div>
+                            <div class="sb-nav-link-icon"><img src="<?php echo base_url; ?>Assets/img/eco_p.png" style="max-width: 40px;"></div>
                             Productos
                         </a>
 
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCompras" aria-expanded="false" aria-controls="collapseCompras">
-                            <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart fa-2x"></i></div>
+                            <div class="sb-nav-link-icon"><img src="<?php echo base_url; ?>Assets/img/buy.png" style="max-width: 40px;"></div>
                             Entradas
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
                         </a>
@@ -103,7 +103,7 @@
                         </div>
 
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseVenta" aria-expanded="false" aria-controls="collapseVenta">
-                            <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart fa-2x"></i></div>
+                            <div class="sb-nav-link-icon"><img src="<?php echo base_url; ?>Assets/img/sell.png" style="max-width: 40px;"></div>
                             Salidas
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down "></i></div>
                         </a>

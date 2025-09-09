@@ -27,9 +27,9 @@
             <div class="modal-body">
                 <form method="post" id="frmBoxx" onsubmit="register_Box(event)">
                     <input type="hidden" id="id" name="id">
-                    <div class="form-group">
-                        <label for="caja">caja</label>
+                    <div class="form-floating mb-3">
                         <input id="caja" class="form-control" type="text" name="caja" placeholder="Nombre Caja">
+                        <label for="caja">caja</label>
                     </div>
                     <button id="btnAction" class="btn btn-primary" type="submit">Registrar</button>
                     <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancelar</button>

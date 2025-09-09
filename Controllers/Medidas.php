@@ -31,11 +31,11 @@ class Medidas extends Controller
         $data = $this->model->getMeasures();
         for ($i = 0; $i < count($data); $i++) {
             if ($data[$i]['estado'] == 1) {
-                $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
+                $data[$i]['estado'] = '<span class="badge bg-success">Activo</span>';
                 $btn_disabled_reingresar = 'disabled';
                 $btn_disabled_eliminar = '';
             } else {
-                $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
+                $data[$i]['estado'] = '<span class="badge bg-danger">Inactivo</span>';
                 $btn_disabled_reingresar = '';
                 $btn_disabled_eliminar = 'disabled';
             }

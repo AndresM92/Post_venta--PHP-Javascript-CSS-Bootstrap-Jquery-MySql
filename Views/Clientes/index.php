@@ -23,30 +23,28 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="title">Nuevo Cliente</h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method="post" id="frmCustomerr" onsubmit="register_customer(event)">
                     <input type="hidden" id="id" name="id">
-                    <div class="form-group">
-                        <label for="cc">cc</label>
+                    <div class="form-floating mb-3">
                         <input id="cc" class="form-control" type="text" name="cc" placeholder="Documento de identidad">
+                        <label for="cc">cc</label>
                     </div>
-                    <div class="form-group">
-                        <label for="nombre">Nombre</label>
+                    <div class="form-floating mb-3">
                         <input id="nombre" class="form-control" type="text" name="nombre" placeholder="Nombre del cliente">
+                        <label for="nombre">Nombre</label>
                     </div>
 
-                    <div class="form-group">
-                        <label for="telefono">telefono</label>
+                    <div class="form-floating mb-3">
                         <input id="telefono" class="form-control" type="text" name="telefono" placeholder="telefono">
+                        <label for="telefono">telefono</label>
                     </div>
 
-                    <div class="form-group">
-                        <label for="direccion">Direccion</label>
+                    <div class="form-floating mb-3">
                         <textarea id="direccion" class="form-control" name="direccion" placeholder="direccion"></textarea>
+                        <label for="direccion">Direccion</label>
                     </div>
 
                     <button id="btnAction" class="btn btn-primary" type="submit">Registrar</button>

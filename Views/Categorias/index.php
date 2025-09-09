@@ -20,16 +20,14 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="title">Nueva Categoria</h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method="post" id="frmCategoryy" onsubmit="register_category(event)">
                     <input type="hidden" id="id" name="id">
-                    <div class="form-group">
-                        <label for="nombre">nombre</label>
+                    <div class="form-floating mb-3">
                         <input id="nombre" class="form-control" type="text" name="nombre" placeholder="Nombre Categoria">
+                        <label for="nombre">nombre</label>
                     </div>
                     <button id="btnAction" class="btn btn-primary" type="submit">Registrar</button>
                     <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancelar</button>

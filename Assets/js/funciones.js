@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 { data: 'estado' },
                 { data: 'acciones' }
             ],
-            dom:'<"row"<"col-sm-2"l><"col-sm-8 text-center"B><"col-sm-2"f>>' +
+            dom: '<"row"<"col-sm-2"l><"col-sm-8 text-center"B><"col-sm-2"f>>' +
                 '<"row"<"col-sm-12"tr>>' +
                 '<"row"<"col-sm-5"i><"col-sm-7"p>>',
 
@@ -193,24 +193,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     buttons: [
                         {
                             extend: 'copyHtml5',
-                            text: '<i class="fas fa-copy"></i>',
-                            className: 'btn btn-primary'
+                            text: '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
                         },
                         {
                             extend: 'excelHtml5',
-                            footer: true,
-                            title: 'Archivo',
-                            filename: 'Export_File',
-                            text: '<span class="badge bg-success"><i class="fas fa-file-excel"></i></span>'
+                            text: '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
                         },
                         {
-                            extend: 'pdf',
-                            text: '<i class="fas fa-file-pdf"></i>',
-                            className: 'btn btn-danger'
+                            extend: 'pdfHtml5',
+                            text: '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+
                         },
                         {
                             extend: 'print',
-                            text: '<i class="fas fa-print"></i> Imprimir'
+                            text: '<i class="fas fa-print"></i>',
+                            titleAttr: 'Print'
                         }
                     ]
                 }
@@ -555,7 +555,7 @@ function register_customer(e) {
                         title: response.msg,
                         timer: 3000
                     });
-                    $("#new_customer").modal("hide");              
+                    $("#new_customer").modal("hide");
                 }
             }
         };
@@ -1580,7 +1580,7 @@ function Calc_Price_Sale(e) {
                             timer: 2000
                         });
                         frm.reset();
-                    }else{
+                    } else {
                         Swal.fire({
                             title: response.msg,
                             icon: response.icono,

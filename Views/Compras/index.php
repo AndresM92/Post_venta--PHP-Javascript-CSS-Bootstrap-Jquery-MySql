@@ -8,34 +8,34 @@
         <form action="" id="frmBuy">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="codigo"><i class="fas fa-barcode"></i> Codigo de Barras</label>
+                    <div class="form-floating mb-3">
                         <input type="hidden" id="id" name="id">
                         <input id="codigo" class="form-control" type="text" name="codigo" placeholder="Codigo de Barras" onkeyup="search_Codigo(event)">
+                        <label for="codigo"><i class="fas fa-barcode"></i> Codigo de Barras</label>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="nombre">Descripcion</label>
+                    <div class="form-floating mb-3">                      
                         <input id="nombre" class="form-control" type="text" name="nombre" placeholder="Descripcion del Producto" disabled>
+                        <label for="nombre">Descripcion</label>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="cantidad">Cant</label>
+                    <div class="form-floating mb-3">                        
                         <input id="cantidad" class="form-control" type="number" name="cantidad" placeholder="Cant" onkeyup="Calc_Price(event)" disabled>
+                        <label for="cantidad">Cant</label>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="precio">Precio</label>
+                    <div class="form-floating mb-3">                      
                         <input id="precio" class="form-control" type="text" name="precio" placeholder="Precio Compra" disabled>
+                        <label for="precio">Precio</label>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="sub_total">SubTotal</label>
+                    <div class="form-floating mb-3">
                         <input id="sub_total" class="form-control" type="text" name="sub_total" placeholder="SubTotal" disabled>
+                        <label for="sub_total">SubTotal</label>
                     </div>
                 </div>
 
