@@ -37,6 +37,17 @@ function frmLogin(e) {
     }
 }
 
+function showAlerts(mssg) {
+
+    Swal.fire({
+        title: mssg.msg,
+        icon: mssg.icon,
+        draggable: true,
+        timer: 2000
+    });
+
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     if (document.getElementById('my_modal')) {
@@ -246,18 +257,30 @@ function frmChange_Pass(e) {
     const nueva_clave = document.getElementById("clave_nueva").value;
     const confirmar_clave = document.getElementById("confirmar_clave").value;
     if (actual == "" || nueva_clave == "" || confirmar_clave == "") {
+
+        let mssg = { "msg": "Todos los campos son obligatorios", "icon": "warning" };
+        showAlerts(mssg);
+
+        /* 
         Swal.fire({
-            icon: "warning",
-            title: "Todos los campos son obligatorios",
-            timer: 3000
-        });
+             icon: "warning",
+             title: "Todos los campos son obligatorios",
+             timer: 3000
+         });
+         */
     }
     else if (nueva_clave.value != confirmar_clave.value) {
+
+        let mssg = { "msg": "Las contraseñas no coinciden", "icon": "warning" };
+        showAlerts(mssg);
+
+        /*
         Swal.fire({
             icon: "warning",
             title: "Las contraseñas no coinciden",
             timer: 3000
         });
+        */
     } else {
 
         const url = base_url + "Usuarios/cambiarPass";
@@ -270,21 +293,31 @@ function frmChange_Pass(e) {
             if (this.readyState == 4 && this.status == 200) {
                 const response = JSON.parse(this.responseText);
                 if (response.msg == "Contraseña modificada con exito") {
+
+                    var mssg = { "msg": "Contraseña modificada con exito", "icon": "success" };
+                    showAlerts(mssg);
+                    /*
                     Swal.fire({
                         title: response.msg,
                         icon: "success",
                         draggable: true,
                         timer: 3000
                     });
+                    */
                     $("#changePass").modal("hide");
                     frm.reset();
                 } else {
+                    var mssg = { "msg": "Contraseña modificada con exito", "icon": "success" };
+                    showAlerts(mssg);
+
+                    /*
                     Swal.fire({
                         title: response.msg,
                         icon: response.icono,
                         draggable: true,
                         timer: 3000
                     });
+                    */
                 }
             }
         };
@@ -310,17 +343,26 @@ function register_user(e) {
     const confirmar = document.getElementById("confirmar");
     const caja = document.getElementById("caja");
     if (usuario.value == "" || nombre.value == "" || caja.value == "") {
+
+        var mssg = { "msg": "Todos los campos son obligatorios", "icon": "error" };
+        showAlerts(mssg);
+        /*
         Swal.fire({
             icon: "error",
             title: "Todos los campos son obligatorios",
             timer: 3000
         });
+        */
     } else if (pass.value != confirmar.value) {
+        var mssg = { "msg": "Las contraseñas no coinciden", "icon": "error" };
+        showAlerts(mssg);
+        /*
         Swal.fire({
             icon: "error",
             title: "Las contraseñas no coinciden",
             timer: 3000
         });
+        */
     } else {
         const url = base_url + "Usuarios/registrar"; // Asegúrate de que base_url esté definido
         const frm = document.getElementById("frmUsuario");
@@ -336,23 +378,36 @@ function register_user(e) {
 
                         const response = JSON.parse(this.responseText);
                         if (response.msg == "Cliente registrado con éxito") {
+
+                            var mssg = { "msg": "Registrado exitosamente", "icon": "success" };
+                            showAlerts(mssg);
+
+                            /*
                             Swal.fire({
                                 title: "Registrado Exitosamente",
                                 icon: "success",
                                 draggable: true,
                                 timer: 3000
                             });
+                            */
                             frm.reset();
                             $("#new_user").modal("hide");
                             t_Usuarios.ajax.reload();
 
                         } else if (response.msg == "Usuario modificado con éxito") {
+
+                            var mssg = { "msg": "Usuario modificado con éxito", "icon": "success" };
+                            showAlerts(mssg);
+
+                            /*
                             Swal.fire({
                                 title: "Usuario modificado con éxito",
                                 icon: "success",
                                 draggable: true,
                                 timer: 3000
                             });
+                            */
+
                             //frm.reset();
                             $("#new_user").modal("hide");
                             t_Usuarios.ajax.reload(null, true);
@@ -360,27 +415,29 @@ function register_user(e) {
 
                         }
                         else {
+                            var mssg = { "msg": response.msg, "icon": "error" };
+                            showAlerts(mssg);
+                            /*
                             Swal.fire({
                                 icon: 'error',
                                 title: response.msg,
                                 timer: 3000
                             });
+                            */
                         }
                     } catch (e) {
                         console.error("Error al parsear JSON:", e);
+                        var mssg = { "msg": "Hubo un problema con la respuesta del servidor", "icon": "error" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire({
                             icon: 'error',
                             title: 'Hubo un problema con la respuesta del servidor.',
                             timer: 3000
                         });
+                        */
                     }
-                } else {
-                    console.error("La respuesta del servidor no es JSON. Respuesta recibida:", this.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'La respuesta del servidor no es válida.',
-                        timer: 3000
-                    });
                 }
             }
         };
@@ -431,19 +488,30 @@ function btn_delete_User(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Usuario eliminado con exito") {
+
+                        var mssg = { "msg": "Usuario eliminado con éxito", "icon": "success" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             '',
                             "success"
                         )
+                        */
                         t_Usuarios.ajax.reload();
 
                     } else {
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             response,
                             "error"
                         )
+                        */
                     }
                 }
             }
@@ -472,19 +540,31 @@ function btn_reingre_User(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Usuario reingresado con exito") {
+
+                        var mssg = { "msg": "Usuario reingresado con éxito", "icon": "success" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             '',
                             "success"
                         )
+                        */
+
                         t_Usuarios.ajax.reload();
 
                     } else {
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             response,
                             "error"
                         )
+                        */
                     }
                 }
             }
@@ -513,11 +593,18 @@ function register_customer(e) {
 
     // Validaciones
     if (cc.value == "" || nombre.value == "" || telefono.value == "" || direccion.value == "") {
+
+        var mssg = { "msg": "Todos los campos son obligatorios", "icon": "error" };
+        showAlerts(mssg);
+
+        /*
         Swal.fire({
             icon: "error",
             title: "Todos los campos son obligatorios",
             timer: 3000
         });
+        */
+
     } else {
         const url = base_url + "Clientes/registrar"; // Asegúrate de que base_url esté definido
         const frm = document.getElementById("frmCustomerr");
@@ -529,32 +616,44 @@ function register_customer(e) {
             if (this.readyState == 4 && this.status == 200) {
                 const response = JSON.parse(this.responseText);
                 if (response.msg == "Cliente registrado con éxito") {
+
+                    var mssg = { "msg": "Cliente registrado con éxito", "icon": "success" };
+                    showAlerts(mssg);
+
+                    /*
                     Swal.fire({
                         title: "Registrado Exitosamente",
                         icon: "success",
                         draggable: true,
                         timer: 3000
                     });
+                    */
+
                     frm.reset();
                     $("#new_customer").modal("hide");
                     t_Clientes.ajax.reload();
 
                 } else if (response.msg == "Cliente modificado con éxito") {
-                    Swal.fire({
-                        title: "Cliente modificado con éxito",
-                        icon: "success",
-                        draggable: true,
-                        timer: 3000
-                    });
+
+                    var mssg = { "msg": "Cliente modificado con éxito", "icon": "success" };
+                    showAlerts(mssg);
+
                     $("#new_customer").modal("hide");
                     t_Clientes.ajax.reload(null, true);
                 }
                 else {
+
+                    var mssg = { "msg": response.msg, "icon": response.icono };
+                    showAlerts(mssg);
+
+                    /*
                     Swal.fire({
                         icon: response.icono,
                         title: response.msg,
                         timer: 3000
                     });
+                    */
+
                     $("#new_customer").modal("hide");
                 }
             }
@@ -614,11 +713,17 @@ function btn_delete_Customer(id) {
                         t_Clientes.ajax.reload();
 
                     } else {
+
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             response,
                             "error"
                         )
+                        */
                     }
                 }
             }
@@ -647,19 +752,32 @@ function btn_reingre_Customer(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Cliente reingresado con exito") {
+
+
+                        var mssg = { "msg": "Cliente reingresado con éxito", "icon": "success" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             '',
                             "success"
                         )
+                        */
+
                         t_Clientes.ajax.reload();
 
                     } else {
+
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
+                        /*
                         Swal.fire(
                             response.msg,
                             response,
                             "error"
                         )
+                        */
                     }
                 }
             }
@@ -683,13 +801,18 @@ function register_category(e) {
 
     const nombre = document.getElementById("nombre");
 
-    // Validaciones
     if (nombre.value == "") {
+
+        var mssg = { "msg": "Todos los campos son obligatorios", "icon": "error" };
+        showAlerts(mssg);
+        /*
         Swal.fire({
             icon: "error",
             title: "Todos los campos son obligatorios",
             timer: 3000
         });
+        */
+
     } else {
         const url = base_url + "Categorias/registrar"; // Asegúrate de que base_url esté definido
         const frm = document.getElementById("frmCategoryy");
@@ -705,49 +828,69 @@ function register_category(e) {
 
                         const response = JSON.parse(this.responseText);
                         if (response.msg == "Categoria registrado con éxito") {
+
+
+                            var mssg = { "msg": "Categoria registrada con éxito", "icon": "success" };
+                            showAlerts(mssg);
+
+                            /*
                             Swal.fire({
                                 title: "Registrado Exitosamente",
                                 icon: "success",
                                 draggable: true,
                                 timer: 3000
                             });
+                            */
+
                             frm.reset();
                             $("#new_category").modal("hide");
                             t_Categorias.ajax.reload();
 
                         } else if (response.msg == "Categoria modificado con éxito") {
+
+
+                            var mssg = { "msg": "Categoria modificada con éxito", "icon": "success" };
+                            showAlerts(mssg);
+
+                            /*
                             Swal.fire({
                                 title: "Categoria modificado con éxito",
                                 icon: "success",
                                 draggable: true,
                                 timer: 3000
                             });
+                            */
                             //frm.reset();
                             $("#new_category").modal("hide");
                             t_Categorias.ajax.reload(null, true);
                         }
                         else {
+
+
+                            var mssg = { "msg": response.msg, "icon": "error" };
+                            showAlerts(mssg);
+
+                            /*
                             Swal.fire({
                                 icon: 'error',
                                 title: response.msg,
                                 timer: 3000
                             });
+                            */
                         }
                     } catch (e) {
                         console.error("Error al parsear JSON:", e);
+
+                        var mssg = { "msg": "Hubo un problema con la respuesta del servidor", "icon": "error" };
+                        showAlerts(mssg);
+                        /*
                         Swal.fire({
                             icon: 'error',
                             title: 'Hubo un problema con la respuesta del servidor.',
                             timer: 3000
                         });
+                        */
                     }
-                } else {
-                    console.error("La respuesta del servidor no es JSON. Respuesta recibida:", this.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'La respuesta del servidor no es válida.',
-                        timer: 3000
-                    });
                 }
             }
         };
@@ -796,19 +939,30 @@ function btn_delete_Category(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Categoria eliminada con exito") {
+
+                        var mssg = { "msg": "Categoria eliminada con éxito", "icon": "success" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             '',
                             "success"
                         )
+                        */
                         t_Categorias.ajax.reload();
 
                     } else {
+
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
+                        /*
                         Swal.fire(
                             response.msg,
                             response,
                             "error"
                         )
+                        */
                     }
                 }
             }
@@ -837,19 +991,31 @@ function btn_reingre_Category(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Categoria reingresado con exito") {
+
+                        var mssg = { "msg": "Categoria reingresada con éxito", "icon": "success" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             '',
                             "success"
                         )
+                        */
                         t_Categorias.ajax.reload();
 
                     } else {
+
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
+
+                        /*
                         Swal.fire(
                             response.msg,
                             response,
                             "error"
                         )
+                            */
                     }
                 }
             }
@@ -873,11 +1039,16 @@ function register_Box(e) {
     const caja = document.getElementById("caja");
 
     if (caja.value == "") {
+
+        var mssg = { "msg": "Todos los campos son obligatorios", "icon": "error" };
+        showAlerts(mssg);
+        /*
         Swal.fire({
             icon: "error",
             title: "Todos los campos son obligatorios",
             timer: 3000
         });
+        */
     } else {
         const url = base_url + "Cajas/registrar";
         const frm = document.getElementById("frmBoxx");
@@ -893,48 +1064,61 @@ function register_Box(e) {
 
                         const response = JSON.parse(this.responseText);
                         if (response.msg == "Caja registrada con éxito") {
+
+                            var mssg = { "msg": "Caja registrada", "icon": "success" };
+                            showAlerts(mssg);
+                            /*
                             Swal.fire({
                                 title: "Registrado Exitosamente",
                                 icon: "success",
                                 draggable: true,
                                 timer: 3000
                             });
+                            */
+
                             frm.reset();
                             $("#new_box").modal("hide");
                             t_Cajas.ajax.reload();
 
                         } else if (response.msg == "Caja modificada con éxito") {
+                            var mssg = { "msg": "Caja modificada", "icon": "success" };
+                            showAlerts(mssg);
+                            /*
                             Swal.fire({
                                 title: "Catja modificado con éxito",
                                 icon: "success",
                                 draggable: true,
                                 timer: 3000
                             });
+                            */
+
                             $("#new_box").modal("hide");
                             t_Cajas.ajax.reload(null, true);
                         }
                         else {
+                            var mssg = { "msg": response.msg, "icon": "error" };
+                            showAlerts(mssg);
+                            /*
                             Swal.fire({
                                 icon: 'error',
                                 title: response.msg,
                                 timer: 3000
                             });
+                            */
+
                         }
                     } catch (e) {
                         console.error("Error al parsear JSON:", e);
+                        var mssg = { "msg": "Hubo un problema con la respuesta del servidor", "icon": "error" };
+                        showAlerts(mssg);
+                        /*
                         Swal.fire({
                             icon: 'error',
                             title: 'Hubo un problema con la respuesta del servidor.',
                             timer: 3000
                         });
+                        */
                     }
-                } else {
-                    console.error("La respuesta del servidor no es JSON. Respuesta recibida:", this.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'La respuesta del servidor no es válida.',
-                        timer: 3000
-                    });
                 }
             }
         };
@@ -982,19 +1166,29 @@ function btn_delete_Box(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Caja eliminada con exito") {
+
+                        var mssg = { "msg": "Caja eliminada", "icon": "success" };
+                        showAlerts(mssg);
+                        /*
                         Swal.fire(
                             response.msg,
                             '',
                             "success"
                         )
+                        */
+
                         t_Cajas.ajax.reload();
 
                     } else {
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
+                        /*
                         Swal.fire(
                             response.msg,
                             response,
                             "error"
                         )
+                        */
                     }
                 }
             }
@@ -1061,11 +1255,10 @@ function register_Measure(e) {
     const nombre_corto = document.getElementById("nombre_corto");
 
     if (nombre.value == "" || nombre_corto.value == "") {
-        Swal.fire({
-            icon: "error",
-            title: "Todos los campos son obligatorios",
-            timer: 3000
-        });
+
+        var mssg = { "msg": "Todos los campos son obligatorios", "icon": "error" };
+        showAlerts(mssg);
+
     } else {
         const url = base_url + "Medidas/registrar";
         const frm = document.getElementById("frmMeasuress");
@@ -1081,48 +1274,29 @@ function register_Measure(e) {
 
                         const response = JSON.parse(this.responseText);
                         if (response.msg == "Medida registrada con éxito") {
-                            Swal.fire({
-                                title: "Registrado Exitosamente",
-                                icon: "success",
-                                draggable: true,
-                                timer: 3000
-                            });
+
+                            var mssg = { "msg": "Medida registrada", "icon": "success" };
+                            showAlerts(mssg);
                             frm.reset();
                             myModal.hide();
                             t_Medidas.ajax.reload();
 
                         } else if (response.msg == "Medida modificada con éxito") {
-                            Swal.fire({
-                                title: "Medida modificada con éxito",
-                                icon: "success",
-                                draggable: true,
-                                timer: 3000
-                            });
+
+                            var mssg = { "msg": "Medida modificada", "icon": "success" };
+                            showAlerts(mssg);
                             myModal.hide();
                             t_Medidas.ajax.reload(null, true);
                         }
                         else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: response.msg,
-                                timer: 3000
-                            });
+                            var mssg = { "msg": response.msg, "icon": "error" };
+                            showAlerts(mssg);
                         }
                     } catch (e) {
                         console.error("Error al parsear JSON:", e);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Hubo un problema con la respuesta del servidor.',
-                            timer: 3000
-                        });
+                        var mssg = { "msg": "Hubo un problema con la respuesta del servidor", "icon": "error" };
+                        showAlerts(mssg);
                     }
-                } else {
-                    console.error("La respuesta del servidor no es JSON. Respuesta recibida:", this.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'La respuesta del servidor no es válida.',
-                        timer: 3000
-                    });
                 }
             }
         };
@@ -1171,19 +1345,14 @@ function btn_delete_Measure(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Medida eliminada con exito") {
-                        Swal.fire(
-                            response.msg,
-                            '',
-                            "success"
-                        )
+
+                        var mssg = { "msg": "Medida eliminada", "icon": "success" };
+                        showAlerts(mssg);
                         t_Medidas.ajax.reload();
 
                     } else {
-                        Swal.fire(
-                            response.msg,
-                            response,
-                            "error"
-                        )
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
                     }
                 }
             }
@@ -1255,11 +1424,9 @@ function register_product(e) {
     const id_categoria = document.getElementById("categoria");
 
     if (codigo.value == "" || descripcion.value == "" || precio_compra.value == "" || precio_venta.value == "") {
-        Swal.fire({
-            icon: "error",
-            title: "Todos los campos son obligatorios",
-            timer: 3000
-        });
+
+        var mssg = { "msg": "Todos los campos son obligatorios", "icon": "error" };
+        showAlerts(mssg);
     } else {
         const url = base_url + "Productos/registrar";
         const frm = document.getElementById("frmProduct");
@@ -1275,52 +1442,33 @@ function register_product(e) {
 
                         const response = JSON.parse(this.responseText);
                         if (response.msg == "Producto registrado con éxito") {
-                            Swal.fire({
-                                title: "Producto registrado con exito",
-                                icon: "success",
-                                draggable: true,
-                                timer: 3000
-                            });
+
+                            var mssg = { "msg": "Producto registrado con éxito", "icon": "success" };
+                            showAlerts(mssg);
                             frm.reset();
                             myModal.hide();
                             //$("#new_product").modal("hide");
                             t_Productos.ajax.reload();
 
                         } else if (response.msg == "Producto modificado con éxito") {
-                            Swal.fire({
-                                title: "Producto modificado con éxito",
-                                icon: "success",
-                                draggable: true,
-                                timer: 3000
-                            });
+
+                            var mssg = { "msg": "Producto modificado", "icon": "success" };
+                            showAlerts(mssg);
                             //frm.reset();
                             myModal.hide();
                             t_Productos.ajax.reload(null, true);
 
-
                         }
                         else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: response.msg,
-                                timer: 3000
-                            });
+                            var mssg = { "msg": response.msg, "icon": "error" };
+                            showAlerts(mssg);
+
                         }
                     } catch (e) {
                         console.error("Error al parsear JSON:", e);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Hubo un problema con la respuesta del servidor.',
-                            timer: 3000
-                        });
+                        var mssg = { "msg": "Hubo un problema con la respuesta del servidor", "icon": "error" };
+                        showAlerts(mssg);
                     }
-                } else {
-                    console.error("La respuesta del servidor no es JSON. Respuesta recibida:", this.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'La respuesta del servidor no es válida.',
-                        timer: 3000
-                    });
                 }
             }
         };
@@ -1380,19 +1528,14 @@ function btn_delete_Product(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Producto eliminado con exito") {
-                        Swal.fire(
-                            response.msg,
-                            '',
-                            "success"
-                        )
+
+                        var mssg = { "msg": "Producto eliminado con éxito", "icon": "success" };
+                        showAlerts(mssg);
                         t_Productos.ajax.reload();
 
                     } else {
-                        Swal.fire(
-                            response.msg,
-                            response,
-                            "error"
-                        )
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
                     }
                 }
             }
@@ -1421,19 +1564,14 @@ function btn_reingre_Product(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "Producto reingresado con exito") {
-                        Swal.fire(
-                            response.msg,
-                            '',
-                            "success"
-                        )
+
+                        var mssg = { "msg": "Producto reingresado", "icon": "success" };
+                        showAlerts(mssg);
                         t_Productos.ajax.reload();
 
                     } else {
-                        Swal.fire(
-                            response.msg,
-                            response,
-                            "error"
-                        )
+                        var mssg = { "msg": response.msg, "icon": "error" };
+                        showAlerts(mssg);
                     }
                 }
             }
@@ -1481,13 +1619,9 @@ function search_Codigo(e) {
                         document.getElementById("cantidad").focus();
 
                     } else {
-                        Swal.fire({
-                            title: "Producto no existe",
-                            icon: "error",
-                            draggable: true,
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
+
+                        var mssg = { "msg": "Producto no existe", "icon": "error" };
+                        showAlerts(mssg);
                         document.getElementById("codigo").value = "";
                         document.getElementById("codigo").focus();
                     }
@@ -1496,14 +1630,8 @@ function search_Codigo(e) {
 
         }
     } else {
-        Swal.fire({
-            title: "Ingrese el codigo",
-            icon: "warning",
-            draggable: true,
-            showConfirmButton: false,
-            timer: 2000
-        });
-
+        var mssg = { "msg": "Ingrese el codigo", "icon": "warning" };
+        showAlerts(mssg);
     }
 }
 
@@ -1523,20 +1651,14 @@ function Calc_Price(e) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "El producto fue ingresado con exito") {
-                        Swal.fire({
-                            title: "Producto fue agregado",
-                            icon: "success",
-                            draggable: true,
-                            timer: 2000
-                        });
+
+                        var mssg = { "msg": "Producto fue agregado", "icon": "success" };
+                        showAlerts(mssg);
                         frm.reset();
                     } else if (response.msg == "Se agrego la cantidad adicional") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: "Producto actualizado",
-                            draggable: true,
-                            timer: 2000
-                        });
+
+                        var mssg = { "msg": "Producto actualizado", "icon": "success" };
+                        showAlerts(mssg);
                         frm.reset();
                     }
                     document.getElementById("cantidad").setAttribute("disabled", "disable");
@@ -1565,28 +1687,18 @@ function Calc_Price_Sale(e) {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.msg == "El producto fue ingresado con exito") {
-                        Swal.fire({
-                            title: "Producto fue agregado",
-                            icon: "success",
-                            draggable: true,
-                            timer: 2000
-                        });
+
+                        var mssg = { "msg": "Producto agregado", "icon": "success" };
+                        showAlerts(mssg);
                         frm.reset();
                     } else if (response.msg == "Se agrego la cantidad adicional") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: "Producto actualizado",
-                            draggable: true,
-                            timer: 2000
-                        });
+
+                        var mssg = { "msg": "Producto actualizado", "icon": "success" };
+                        showAlerts(mssg);
                         frm.reset();
                     } else {
-                        Swal.fire({
-                            title: response.msg,
-                            icon: response.icono,
-                            draggable: true,
-                            timer: 2000
-                        });
+                        var mssg = { "msg": response.msg, "icon": response.icono };
+                        showAlerts(mssg);
                         frm.reset();
                     }
                     document.getElementById("cantidad").setAttribute("disabled", "disable");
@@ -1674,13 +1786,8 @@ function calDescuento(e, id) {
     e.preventDefault();
     if (e.target.value == "") {
 
-        Swal.fire({
-            title: "Ingrese el Descuento",
-            icon: "warning",
-            draggable: true,
-            showConfirmButton: false,
-            timer: 2000
-        });
+        var mssg = { "msg": "Ingrese el descuento", "icon": "warning" };
+        showAlerts(mssg);
     } else {
         if (e.which == 13) {
             const url = base_url + "Compras/calDescuento/" + id + "/" + e.target.value;
@@ -1691,7 +1798,6 @@ function calDescuento(e, id) {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log(this.responseText);
                     upload_Detalis_Sale();
-                    //const response = JSON.parse(this.responseText);
 
                 }
             }
@@ -1716,18 +1822,13 @@ function deleteDetails(id, accion) {
         if (this.readyState == 4 && this.status == 200) {
             const response = JSON.parse(this.responseText);
             if (response.msg == "El producto fue eliminado de la lista") {
-                Swal.fire({
-                    title: "El producto fue eliminado de la lista",
-                    icon: "success",
-                    draggable: true,
-                    timer: 3000
-                });
+
+                var mssg = { "msg": "El producto fue eliminado de la lista", "icon": "success" };
+                showAlerts(mssg);
             } else if (response.msg == "Error al eliminar el producto") {
-                Swal.fire({
-                    icon: 'error',
-                    title: response.msg,
-                    timer: 3000
-                });
+
+                var mssg = { "msg": response.msg, "icon": "error" };
+                showAlerts(mssg);
             }
             if (accion == 1) {
                 upload_Detalis();
@@ -1771,11 +1872,9 @@ function generate_Purchase_Sale(accion) {
                     const response = JSON.parse(this.responseText);
                     let ruta;
                     if (response.msg == "Se ha generado la Compra" || response.msg == 'La caja esta cerrada') {
-                        Swal.fire(
-                            response.msg,
-                            '',
-                            response.icono
-                        )
+
+                        var mssg = { "msg": response.msg, "icon": response.icono };
+                        showAlerts(mssg);
                         if (response.icono != 'info') {
                             ruta = base_url + 'Compras/generarPdf/' + response.id_compra;
                             window.open(ruta);
@@ -1783,11 +1882,9 @@ function generate_Purchase_Sale(accion) {
                         }
 
                     } else {
-                        Swal.fire(
-                            response.msg,
-                            response,
-                            "success"
-                        )
+
+                        var mssg = { "msg": response.msg, "icon": "success" };
+                        showAlerts(mssg);
                         ruta = base_url + 'Compras/generarPdfVenta/' + response.id_venta;
                         window.open(ruta);
                         setTimeout(() => { window.location.reload(); }, 300);
@@ -1811,17 +1908,13 @@ function modiEmpresa(params) {
         if (this.readyState == 4 && this.status == 200) {
             const response = JSON.parse(this.responseText);
             if (response.msg == "Datos de la empresa modificados con exito") {
-                Swal.fire(
-                    response.msg,
-                    '',
-                    "success"
-                )
+
+                var mssg = { "msg": "Datos de la empresa modificados con éxito", "icon": "success" };
+                showAlerts(mssg);
             } else {
-                Swal.fire(
-                    response.msg,
-                    response,
-                    "error"
-                )
+
+                var mssg = { "msg": response.msg, "icon": "error" };
+                showAlerts(mssg);
             }
         }
     }
@@ -1848,13 +1941,9 @@ function search_Codigo_Sale(e) {
                         document.getElementById("cantidad").focus();
 
                     } else {
-                        Swal.fire({
-                            title: "Producto no existe",
-                            icon: "error",
-                            draggable: true,
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
+
+                        var mssg = { "msg": "Producto no existe", "icon": "error" };
+                        showAlerts(mssg);
                         document.getElementById("codigo").value = "";
                         document.getElementById("codigo").focus();
                     }
@@ -1863,14 +1952,8 @@ function search_Codigo_Sale(e) {
 
         }
     } else {
-        Swal.fire({
-            title: "Ingrese el codigo",
-            icon: "warning",
-            draggable: true,
-            showConfirmButton: false,
-            timer: 2000
-        });
-
+        var mssg = { "msg": "Ingrese el codigo", "icon": "warning" };
+        showAlerts(mssg);
     }
 
 }
@@ -1969,11 +2052,9 @@ function btnAnularC(id) {
             http.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     const response = JSON.parse(this.responseText);
-                    Swal.fire(
-                        response.msg,
-                        '',
-                        response.icono
-                    )
+
+                    var mssg = { "msg": response.msg, "icon": response.icono };
+                    showAlerts(mssg);
                 }
                 t_historial_c.ajax.reload();
             }
@@ -1996,7 +2077,11 @@ function Open_Arqueo(e) {
     e.preventDefault();
     const monto_inicial = document.getElementById('monto_inicial').value;
     if (monto_inicial == "") {
-        alert("Ingrese el monto inicial");
+
+        var mssg = { "msg": "Ingrese el monto inicial", "icon": "warning" };
+        showAlerts(mssg);
+        //alert("Ingrese el monto inicial");
+
     } else {
         const frm = document.getElementById("frmOpenBox");
         const url = base_url + "Cajas/abrirArqueo";
@@ -2073,11 +2158,9 @@ function reg_permisos(e) {
         if (this.readyState == 4 && this.status == 200) {
             const response = JSON.parse(this.responseText);
             if (response.msg != '') {
-                Swal.fire(
-                    response.msg,
-                    '',
-                    response.icono
-                )
+
+                var mssg = { "msg": response.msg, "icon": response.icono };
+                showAlerts(mssg);
             }
         }
 
